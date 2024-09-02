@@ -8,9 +8,7 @@ import lombok.Setter;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "vuelos")
@@ -21,7 +19,7 @@ import java.util.Date;
 public class Vuelo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_vuelo;
+    private Long idVuelo;
     private String origen;
     private String destino;
     @Column(name = "fecha_de_salida")
