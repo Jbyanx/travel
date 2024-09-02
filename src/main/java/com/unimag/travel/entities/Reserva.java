@@ -19,9 +19,10 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idReserva;
 
-    private Cliente cliente;
+    //private Cliente cliente;
 
-    private Vuelo vuelo;
+    //private Vuelo vuelo;
+
     @Column(name = "fecha_de_reserva")
     private LocalDate fechaDeReserva;
     @Column(name = "numero_de_pasajeros")

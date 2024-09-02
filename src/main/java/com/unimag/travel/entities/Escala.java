@@ -23,9 +23,10 @@ public class Escala {
     @Id
     private Long idEscala;
 
-    private Vuelo vuelo;
+    //private Vuelo vuelo;
 
-    private Aeropuerto aeropuerto;
+    //private Aeropuerto aeropuerto;
+
     @Column(name = "tiempo_de_escala")
     private Duration tiempoDeEscala;
 }
