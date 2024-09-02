@@ -29,4 +29,15 @@ public class Vuelo {
     private Duration duracion;
     private int capacidad;
 
+    @OneToOne
+    @JoinColumn(name = "id_aerolinea")
+    private Aerolinea aerolinea;
+
+    @OneToOne
+    @JoinColumn(name = "id_aeropuerto_origen")
+    private Aeropuerto aeropuertoOrigen;
+
+    @OneToOne
+    @JoinColumn(name = "id_aeropuerto_destino")
+    private Aeropuerto aeropuertoDestino;
 }

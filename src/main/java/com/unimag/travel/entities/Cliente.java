@@ -22,4 +22,8 @@ public class Cliente {
     private String telefono;
     @Column(name = "correo_electronico")
     private String correoElectronico;
+
+    @OneToOne
+    @JoinColumn(name = "id_ciente")
+    private Reserva reserva;
 }

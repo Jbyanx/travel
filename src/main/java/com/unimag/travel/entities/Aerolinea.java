@@ -17,6 +17,8 @@ public class Aerolinea {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idAerolinea;
     private String nombre;
+    @Column(name = "codigo_de_aerolinea")
     private Long codigoDeAerolinea;
+    @Column(name = "pais_de_origen")
     private String paisDeOrigen;
 }
