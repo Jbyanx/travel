@@ -1,0 +1,34 @@
+package com.unimag.travel.entities;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
+
+@Entity
+@Table(name = "vuelos")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Vuelo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id_vuelo;
+    private String origen;
+    private String destino;
+    @Column(name = "fecha_de_salida")
+    private LocalDate fechaDeSalida;
+    @Column(name = "hora_de_salida")
+    private LocalTime horaDeSalida;
+    private Duration duracion;
+    private int capacidad;
+
+}
