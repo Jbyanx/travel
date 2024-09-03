@@ -40,4 +40,12 @@ public class Vuelo {
     @OneToOne
     @JoinColumn(name = "id_aeropuerto_destino")
     private Aeropuerto aeropuertoDestino;
+    
+    @ManyToMany
+    @JoinTable(
+            name = "vuelos_escalas",
+            joinColumns = @JoinColumn(name = "id_vuelo"),
+            inverseJoinColumns = @JoinColumn(name = "id_escala")
+    )
+    private List<Escala> escalas;
 }
