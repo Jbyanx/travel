@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "aerolineas")
 @Getter
@@ -21,4 +24,8 @@ public class Aerolinea {
     private Long codigoDeAerolinea;
     @Column(name = "pais_de_origen")
     private String paisDeOrigen;
+
+    @OneToMany
+    @JoinColumn(name = "id_aerolinea")
+    private List<Vuelo> vuelos;
 }
