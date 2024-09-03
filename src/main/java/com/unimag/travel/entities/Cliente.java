@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "clientes")
 @Getter
@@ -23,7 +25,7 @@ public class Cliente {
     @Column(name = "correo_electronico")
     private String correoElectronico;
 
-    @OneToOne
-    @JoinColumn(name = "id_ciente")
-    private Reserva reserva;
+    @OneToMany
+    @JoinColumn(name = "id_cliente")
+    private List<Reserva> reservas;
 }
