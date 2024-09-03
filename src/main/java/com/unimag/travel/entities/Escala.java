@@ -1,10 +1,7 @@
 package com.unimag.travel.entities;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,9 +20,13 @@ public class Escala {
     @Id
     private Long idEscala;
 
-    //private Vuelo vuelo;
+    @OneToOne
+    @JoinColumn(name = "id_escala")
+    private Vuelo vuelo;
 
-    //private Aeropuerto aeropuerto;
+    @OneToOne
+    @JoinColumn(name = "id_escala")
+    private Aeropuerto aeropuerto;
 
     @Column(name = "tiempo_de_escala")
     private Duration tiempoDeEscala;
