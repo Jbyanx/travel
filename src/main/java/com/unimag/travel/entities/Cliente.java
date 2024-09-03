@@ -28,4 +28,12 @@ public class Cliente {
     @OneToMany
     @JoinColumn(name = "id_cliente")
     private List<Reserva> reservas;
+    
+    @ManyToMany
+    @JoinTable(
+            name = "clientes_vuelos",
+            joinColumns = @JoinColumn(name = "id_cliente"),
+            inverseJoinColumns = @JoinColumn(name = "id_vuelo")
+    )
+    private List<Vuelo> vuelos;
 }
