@@ -1,3 +1,5 @@
+correr la imagen de postgres:
+
 docker run --name postgres-pweb \
   -e POSTGRES_PASSWORD=sebaj \
   -e POSTGRES_USER=jabes \
