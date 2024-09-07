@@ -1,4 +1,4 @@
-package com.unimag.travel.repository;
+package com.unimag.travel.repositories;
 
 import com.unimag.travel.entities.Escala;
 import org.springframework.data.jpa.repository.JpaRepository;
