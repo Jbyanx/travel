@@ -19,7 +19,8 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idReserva;
 
-    //private Cliente cliente;
+    @ManyToOne(targetEntity = Cliente.class, fetch = FetchType.EAGER)
+    private Cliente cliente;
 
     //private Vuelo vuelo;
 
