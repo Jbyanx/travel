@@ -26,7 +26,7 @@ public class AerolineaServiceImpl implements AerolineaService {
 
     @Override
     public Optional<Aerolinea> getAerolineaByName(String name) {
-        return aerolineaRepository.getAerolineaByName(name);
+        return aerolineaRepository.getAerolineaByNombre(name);
     }
 
     @Override

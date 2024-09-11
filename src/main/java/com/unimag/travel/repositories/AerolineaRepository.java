@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface AerolineaRepository extends JpaRepository<Aerolinea, Long> {
-    Optional<Aerolinea> getAerolineaByName(String name);
+    Optional<Aerolinea> getAerolineaByNombre(String name);
 }

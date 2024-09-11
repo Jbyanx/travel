@@ -26,7 +26,7 @@ public class AeropuertoServiceImpl implements AeropuertoService {
 
     @Override
     public Optional<Aeropuerto> getAeropuertoByName(String name) {
-        return aeropuertoRepository.getAeropuertoByName(name);
+        return aeropuertoRepository.getAeropuertoByNombre(name);
     }
 
     @Override

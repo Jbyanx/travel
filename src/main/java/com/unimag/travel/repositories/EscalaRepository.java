@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface EscalaRepository extends JpaRepository<Escala, Long> {
-    Optional<Escala> getEscalaByName(String name);
+
 }

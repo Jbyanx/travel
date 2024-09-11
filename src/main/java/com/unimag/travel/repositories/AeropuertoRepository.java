@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface AeropuertoRepository extends JpaRepository<Aeropuerto, Long> {
-    Optional<Aeropuerto> getAeropuertoByName(String name);
+    Optional<Aeropuerto> getAeropuertoByNombre(String name);
 }

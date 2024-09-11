@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface VueloRepository extends JpaRepository<Vuelo, Long> {
-    Optional<Vuelo> getVueloByName(String name);
+
 }

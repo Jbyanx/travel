@@ -20,6 +20,7 @@ public class Reserva {
     private Long idReserva;
 
     @ManyToOne(targetEntity = Cliente.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
     //private Vuelo vuelo;

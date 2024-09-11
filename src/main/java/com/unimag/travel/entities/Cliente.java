@@ -26,7 +26,6 @@ public class Cliente {
     private String correoElectronico;
 
     @OneToMany(mappedBy = "cliente")
-    @JoinColumn(name = "id_cliente")
     private List<Reserva> reservas;
     
     @ManyToMany

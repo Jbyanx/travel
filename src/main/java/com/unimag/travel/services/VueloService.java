@@ -9,7 +9,6 @@ public interface VueloService {
 
     Optional<Vuelo> getVueloById(Long id);
 
-    Optional<Vuelo> getVueloByName(String name);
 
     List<Vuelo> getAllVuelos();
 

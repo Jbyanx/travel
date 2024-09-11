@@ -26,7 +26,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public Optional<Cliente> getClienteByName(String name) {
-        return clienteRepository.getClienteByName(name);
+        return clienteRepository.getClienteByNombre(name);
     }
 
     @Override

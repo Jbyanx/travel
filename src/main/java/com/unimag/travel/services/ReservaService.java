@@ -9,7 +9,6 @@ public interface ReservaService {
 
     Optional<Reserva> getReservaById(Long id);
 
-    Optional<Reserva> getReservaByName(String name);
 
     List<Reserva> getAllReservas();
 

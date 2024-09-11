@@ -9,8 +9,6 @@ public interface EscalaService {
 
     Optional<Escala> getEscalaById(Long id);
 
-    Optional<Escala> getEscalaByName(String name);
-
     List<Escala> getAllEscalas();
 
     Escala saveEscala(Escala escala);

@@ -24,10 +24,6 @@ public class EscalaServiceImpl implements EscalaService {
         return escalaRepository.findById(id);
     }
 
-    @Override
-    public Optional<Escala> getEscalaByName(String name) {
-        return escalaRepository.getEscalaByName(name);
-    }
 
     @Override
     public List<Escala> getAllEscalas() {

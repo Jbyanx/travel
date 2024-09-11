@@ -25,11 +25,6 @@ public class VueloServiceImpl implements VueloService {
     }
 
     @Override
-    public Optional<Vuelo> getVueloByName(String name) {
-        return vueloRepository.getVueloByName(name);
-    }
-
-    @Override
     public List<Vuelo> getAllVuelos() {
         return vueloRepository.findAll();
     }

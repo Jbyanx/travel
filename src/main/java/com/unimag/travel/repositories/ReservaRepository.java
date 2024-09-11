@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ReservaRepository extends JpaRepository<Reserva, Long> {
-    Optional<Reserva> getReservaByName(String name);
+
 }

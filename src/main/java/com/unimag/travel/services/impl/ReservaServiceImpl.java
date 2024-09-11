@@ -25,11 +25,6 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     @Override
-    public Optional<Reserva> getReservaByName(String name) {
-        return reservaRepository.getReservaByName(name);
-    }
-
-    @Override
     public List<Reserva> getAllReservas() {
         return reservaRepository.findAll();
     }
