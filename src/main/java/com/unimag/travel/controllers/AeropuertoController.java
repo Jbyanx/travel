@@ -32,9 +32,6 @@ public class AeropuertoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<Aeropuerto> createAeropuerto(@RequestBody Aeropuerto aeropuerto){return crearAeropuerto(aeropuerto);}
-
     @PutMapping("/idAeropuerto")
     public ResponseEntity<Aeropuerto> updateAeropuerto(@PathVariable Long idAeropuerto, @RequestBody Aeropuerto aeropuerto){
         Optional<Aeropuerto> aeropuertoFromDb = Optional.of(aeropuertoService.updateAeropuertoById(idAeropuerto, aeropuerto));

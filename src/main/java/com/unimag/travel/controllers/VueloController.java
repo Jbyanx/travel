@@ -33,19 +33,12 @@ public class VueloController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<Vuelo> createVuelo(@RequestBody Vuelo vuelo) {
-        return crearVuelo(vuelo);
-    }
-
     @PutMapping("/{idCliente}")
     public ResponseEntity<Vuelo> updateVuelo(@PathVariable Long idVuelo, @RequestBody Vuelo vuelo) {
         Optional<Vuelo> vueloFromDb = Optional.of(vueloService.updateVueloById(idVuelo, vuelo));
 
         return vueloFromDb.map(c -> ResponseEntity.ok(c))
-                .orElseGet(() -> {
-                    return createVuelo(vuelo);
-                });
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{idVuelo}")
