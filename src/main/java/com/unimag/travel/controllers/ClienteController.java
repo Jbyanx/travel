@@ -34,11 +34,6 @@ public class ClienteController {
                 .orElse(ResponseEntity.notFound().build());  // Si el cliente no existe, retorna 404 Not Found.
     }
 
-    @PostMapping
-    public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) {
-        return crearCliente(cliente);
-    }
-
     @PutMapping("/{idCliente}")
     public ResponseEntity<Cliente> updateCliente(@PathVariable Long idCliente, @RequestBody Cliente cliente) {
         Optional<Cliente> clienteFromDb = Optional.of(clienteService.updateClienteById(idCliente, cliente));
