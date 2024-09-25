@@ -38,7 +38,7 @@ public class AeropuertoController {
 
         return aeropuertoFromDb.map(c -> ResponseEntity.ok(c))
                 .orElseGet(() -> {
-                    return createAeropuerto(aeropuerto);
+                    return ResponseEntity.notFound().build();
                 });
     }
 
