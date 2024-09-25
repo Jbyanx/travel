@@ -33,6 +33,13 @@ public class AerolineaController {
                 .orElseThrow(() -> new RuntimeException("Aerolinea "+id+" not found"));
     }
 
+    @GetMapping
+    public ResponseEntity<Aerolinea> getAerolineaByName(@RequestParam String name){
+        return aerolineaService.getAerolineaByName(name)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new RuntimeException("Aerolinea  not found"));
+    }
+
     @PostMapping
     public ResponseEntity<Aerolinea> createOneAerolinea(@RequestBody Aerolinea aerolinea){
         Aerolinea createdAerolinea = aerolineaService.saveAerolinea(aerolinea);
