@@ -39,7 +39,7 @@ public class EscalaController {
 
         URI newLocation = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(createdEscala)
+                .buildAndExpand(createdEscala.getIdEscala())
                 .toUri();
 
         return ResponseEntity.created(newLocation).body(createdEscala);
@@ -49,7 +49,7 @@ public class EscalaController {
     public ResponseEntity<Escala> updateEscalaById(@RequestBody Escala escala, @PathVariable Long id){
         Optional<Escala> oldEscala = escalaService.getEscalaById(id);
 
-        return oldEscala.map( a -> ResponseEntity.ok(a))
+        return oldEscala.map( e -> ResponseEntity.ok(e))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
