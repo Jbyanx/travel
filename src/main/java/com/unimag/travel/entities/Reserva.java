@@ -23,7 +23,9 @@ public class Reserva {
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
-    //private Vuelo vuelo;
+    @OneToOne
+    @JoinColumn(name = "id_vuelo")
+    private Vuelo vuelo;
 
     @Column(name = "fecha_de_reserva")
     private LocalDate fechaDeReserva;
