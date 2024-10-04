@@ -11,6 +11,9 @@ public record SaveVuelo(
         LocalDate fechaDeSalida,
         LocalTime horaDeSalida,
         Duration duracion,
-        int capacidad
+        int capacidad,
+        long idAerolinea,
+        long idAeropuertoOrigen,
+        long idAeropuertoDestino
 ) implements Serializable {
 }
