@@ -69,7 +69,7 @@ public class AerolineaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAerolinea(@PathVariable Long id) {try{
+    public ResponseEntity<Void> deleteAerolinea(@PathVariable Long id) {
         aerolineaService.deleteAerolineaById(id);
         return ResponseEntity.noContent().build();
     }
