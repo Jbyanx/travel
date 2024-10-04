@@ -6,12 +6,13 @@ import com.unimag.travel.entities.Vuelo;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-
-import java.util.List;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface VueloMapper {
+    //Instancia estatica
+    VueloMapper INSTANCE = Mappers.getMapper(VueloMapper.class);
+
     // SAVE VUELO
     @Mapping(target = "idAerolinea", source = "aerolinea.idAerolinea")
     @Mapping(target = "idAeropuertoOrigen", source = "aeropuertoOrigen.idAeropuerto")
