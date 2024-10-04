@@ -42,7 +42,7 @@ public class AerolineaServiceImpl implements AerolineaService {
     @Override
     public GetAerolinea saveAerolinea(SaveAerolinea saveAerolinea) {
         //convertimos el saveAerolinea a entidad
-        Aerolinea aerolineaToSave = AerolineaMapper.INSTANCE.SaveAerolineaToAerolinea(saveAerolinea);
+        Aerolinea aerolineaToSave = AerolineaMapper.INSTANCE.saveAerolineaToAerolinea(saveAerolinea);
         //guardamos esa entidad y devolvemos el mapeo a get aerolinea
         GetAerolinea getSavedAerolinea = AerolineaMapper.INSTANCE.aerolineaToGetAerolinea(aerolineaRepository.save(aerolineaToSave));
         return getSavedAerolinea;
@@ -50,7 +50,7 @@ public class AerolineaServiceImpl implements AerolineaService {
 
     @Override
     public GetAerolinea updateAerolineaById(Long id, SaveAerolinea saveAerolinea) {
-        Aerolinea newAerolinea = AerolineaMapper.INSTANCE.SaveAerolineaToAerolinea(saveAerolinea);
+        Aerolinea newAerolinea = AerolineaMapper.INSTANCE.saveAerolineaToAerolinea(saveAerolinea);
         Aerolinea aerolineaFromDb = aerolineaRepository.findById(id).get();
 
         if(aerolineaFromDb != null) {
