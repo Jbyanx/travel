@@ -4,6 +4,7 @@ import com.unimag.travel.entities.Aerolinea;
 import com.unimag.travel.services.AerolineaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,8 +23,16 @@ public class AerolineaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Aerolinea>> getAllAerolineas(){
-        return ResponseEntity.ok(aerolineaService.getAllAerolineas());
+    public ResponseEntity<List<Aerolinea>> getAllAerolineas(@RequestParam String name){
+        if(StringUtils.hasText(name)){
+            return ResponseEntity.ok(
+                        aerolineaService.getAerolineaByName(name)
+                                .stream()
+                                .toList()
+            );
+        }else{
+            return ResponseEntity.ok(aerolineaService.getAllAerolineas());
+        }
     }
 
     @GetMapping("/{id}")
@@ -31,13 +40,6 @@ public class AerolineaController {
         return aerolineaService.getAerolineaById(id)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new RuntimeException("Aerolinea "+id+" not found"));
-    }
-
-    @GetMapping
-    public ResponseEntity<Aerolinea> getAerolineaByName(@RequestParam String name){
-        return aerolineaService.getAerolineaByName(name)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new RuntimeException("Aerolinea  not found"));
     }
 
     @PostMapping
