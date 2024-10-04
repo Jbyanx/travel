@@ -3,10 +3,11 @@ package com.unimag.travel.mapper;
 import com.unimag.travel.dto.request.SaveVuelo;
 import com.unimag.travel.dto.response.GetVuelo;
 import com.unimag.travel.entities.Vuelo;
-import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 @Mapper
 public interface VueloMapper {
@@ -19,8 +20,13 @@ public interface VueloMapper {
     @Mapping(target = "idAeropuertoDestino", source = "aeropuertoDestino.idAeropuerto")
     SaveVuelo vueloToSaveVuelo(Vuelo vuelo);
 
-    @InheritInverseConfiguration
+    @Mapping(source = "idAerolinea", target = "aerolinea.idAerolinea")
+    @Mapping(source = "idAeropuertoOrigen", target = "aeropuertoOrigen.idAeropuerto")
+    @Mapping(source = "idAeropuertoDestino", target = "aeropuertoDestino.idAeropuerto")
     Vuelo saveVueloToVuelo(SaveVuelo saveVuelo);
+
+    List<SaveVuelo> vueloListToSaveVueloList(List<Vuelo> vueloList);
+    List<Vuelo> saveVueloListToVueloList(List<SaveVuelo> saveVueloList);
 
     // GET VUELO
     @Mapping(target = "id", source = "idVuelo")
@@ -29,6 +35,12 @@ public interface VueloMapper {
     @Mapping(target = "aeropuertoDestino", source = "aeropuertoDestino.nombre")
     GetVuelo vueloToGetVuelo(Vuelo vuelo);
 
-    @InheritInverseConfiguration
+    @Mapping(source = "id", target = "idVuelo")
+    @Mapping(source = "aerolinea", target = "aerolinea.nombre")
+    @Mapping(source = "aeropuertoOrigen", target = "aeropuertoOrigen.nombre")
+    @Mapping(source = "aeropuertoDestino", target = "aeropuertoDestino.nombre")
     Vuelo getVueloToVuelo(GetVuelo getVuelo);
+
+    List<GetVuelo> vueloListToGetVueloList(List<Vuelo> vueloList);
+    List<Vuelo> getVueloListToVueloList(List<GetVuelo> getVueloList);
 }
