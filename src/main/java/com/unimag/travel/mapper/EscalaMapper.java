@@ -6,9 +6,12 @@ import com.unimag.travel.entities.Escala;
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = {AeroPuertoMapper.class, VueloMapper.class})
 public interface EscalaMapper {
+    EscalaMapper INSTANCE = Mappers.getMapper(EscalaMapper.class);
+
     //Save Escala
     @Mapping(target = "idVuelo", source = "vuelo.idVuelo")
     @Mapping(target = "idAeropuerto", source = "aeropuerto.idAeropuerto")
