@@ -2,6 +2,8 @@ package com.unimag.travel.mapper;
 
 import com.unimag.travel.dto.response.GetAerolinea;
 import com.unimag.travel.dto.request.SaveAerolinea;
+import com.unimag.travel.dto.response.GetEscala;
+import com.unimag.travel.dto.response.GetVuelo;
 import com.unimag.travel.entities.Aerolinea;
 import com.unimag.travel.entities.Escala;
 import com.unimag.travel.entities.Vuelo;
@@ -54,19 +56,19 @@ public interface AerolineaMapper {
             @Mapping(target = "aeropuertoOrigen", source = "aeropuertoOrigen.nombre"),
             @Mapping(target = "aeropuertoDestino", source = "aeropuertoDestino.nombre")
     })
-    GetAerolinea.GetVuelo vueloToGetVuelo(Vuelo vuelo);
+    GetVuelo vueloToGetVuelo(Vuelo vuelo);
 
     @Mappings({
             @Mapping(target = "idVuelo", source = "id"),
             @Mapping(target = "aeropuertoOrigen.nombre", source = "aeropuertoOrigen"),
             @Mapping(target = "aeropuertoDestino.nombre", source = "aeropuertoDestino")
     })
-    Vuelo getVueloToVuelo(GetAerolinea.GetVuelo getVuelo);
+    Vuelo getVueloToVuelo(GetVuelo getVuelo);
 
     //listas de vuelos de la aerolinea
-    List<GetAerolinea.GetVuelo> vueloListToGetVueloList(List<Vuelo> vuelos);
+    List<GetVuelo> vueloListToGetVueloList(List<Vuelo> vuelos);
 
-    List<Vuelo> getVueloListToVueloList(List<GetAerolinea.GetVuelo> getVuelos);
+    List<Vuelo> getVueloListToVueloList(List<GetVuelo> getVuelos);
 
     //listas de aerolineas
     List<GetAerolinea> aerolineaListToGetAerolineaList(List<Aerolinea> aerolineas);
@@ -75,13 +77,13 @@ public interface AerolineaMapper {
 
     //escalas dentro de GetVuelos
     @Mapping(target = "aeropuerto", source = "aeropuerto.nombre")
-    GetAerolinea.GetVuelo.GetEscala escalaToGetEscala(Escala escala);
+    GetEscala escalaToGetEscala(Escala escala);
 
     @Mapping(target = "aeropuerto.nombre", source = "aeropuerto")
-    Escala getEscalaToEscala(GetAerolinea.GetVuelo.GetEscala getEscala);
+    Escala getEscalaToEscala(GetEscala getEscala);
 
     //listas de escalas
-    List<GetAerolinea.GetVuelo.GetEscala> escalaListToGetEscalaList(List<Escala> escalas);
+    List<GetEscala> escalaListToGetEscalaList(List<Escala> escalas);
 
-    List<Escala> getEscalaListToEscalaList(List<GetAerolinea.GetVuelo.GetEscala> getEscalaList);
+    List<Escala> getEscalaListToEscalaList(List<GetEscala> getEscalaList);
 }
