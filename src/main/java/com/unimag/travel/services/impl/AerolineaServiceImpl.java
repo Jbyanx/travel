@@ -1,6 +1,9 @@
 package com.unimag.travel.services.impl;
 
+import com.unimag.travel.dto.request.SaveAerolinea;
+import com.unimag.travel.dto.response.GetAerolinea;
 import com.unimag.travel.entities.Aerolinea;
+import com.unimag.travel.mapper.AerolineaMapper;
 import com.unimag.travel.repositories.AerolineaRepository;
 import com.unimag.travel.services.AerolineaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,37 +23,45 @@ public class AerolineaServiceImpl implements AerolineaService {
 
 
     @Override
-    public Optional<Aerolinea> getAerolineaById(Long id) {
-        return aerolineaRepository.findById(id);
+    public Optional<GetAerolinea> getAerolineaById(Long id) {
+        Optional<Aerolinea> aerolineaOptional = aerolineaRepository.findById(id);
+        return aerolineaOptional.map(AerolineaMapper.INSTANCE::aerolineaToGetAerolinea);
     }
 
     @Override
-    public Optional<Aerolinea> getAerolineaByName(String name) {
-        return aerolineaRepository.getAerolineaByNombre(name);
+    public Optional<GetAerolinea> getAerolineaByName(String name) {
+        return aerolineaRepository.getAerolineaByNombre(name).map(AerolineaMapper.INSTANCE::aerolineaToGetAerolinea);
     }
 
     @Override
-    public List<Aerolinea> getAllAerolineas() {
-        return aerolineaRepository.findAll();
+    public List<GetAerolinea> getAllAerolineas() {
+        List<Aerolinea> aerolineaList = aerolineaRepository.findAll();
+        return AerolineaMapper.INSTANCE.aerolineaListToGetAerolineaList(aerolineaList);
     }
 
     @Override
-    public Aerolinea saveAerolinea(Aerolinea aerolinea) {
-        return aerolineaRepository.save(aerolinea);
+    public GetAerolinea saveAerolinea(SaveAerolinea saveAerolinea) {
+        //convertimos el saveAerolinea a entidad
+        Aerolinea aerolineaToSave = AerolineaMapper.INSTANCE.SaveAerolineaToAerolinea(saveAerolinea);
+        //guardamos esa entidad y devolvemos el mapeo a get aerolinea
+        GetAerolinea getSavedAerolinea = AerolineaMapper.INSTANCE.aerolineaToGetAerolinea(aerolineaRepository.save(aerolineaToSave));
+        return getSavedAerolinea;
     }
 
     @Override
-    public Aerolinea updateAerolineaById(Long id, Aerolinea saveAerolinea) {
+    public GetAerolinea updateAerolineaById(Long id, SaveAerolinea saveAerolinea) {
+        Aerolinea newAerolinea = AerolineaMapper.INSTANCE.SaveAerolineaToAerolinea(saveAerolinea);
         Aerolinea aerolineaFromDb = aerolineaRepository.findById(id).get();
+
         if(aerolineaFromDb != null) {
-            aerolineaFromDb.setNombre(saveAerolinea.getNombre());
-            aerolineaFromDb.setPaisDeOrigen(saveAerolinea.getPaisDeOrigen());
-            aerolineaFromDb.setVuelos(saveAerolinea.getVuelos());
-            aerolineaFromDb.setCodigoDeAerolinea(saveAerolinea.getCodigoDeAerolinea());
+            aerolineaFromDb.setNombre(newAerolinea.getNombre());
+            aerolineaFromDb.setPaisDeOrigen(newAerolinea.getPaisDeOrigen());
+            aerolineaFromDb.setVuelos(newAerolinea.getVuelos());
+            aerolineaFromDb.setCodigoDeAerolinea(newAerolinea.getCodigoDeAerolinea());
         } else {
             throw new RuntimeException("Aerolinea ID:" +id + " not found");
         }
-        return aerolineaRepository.save(aerolineaFromDb);
+        return AerolineaMapper.INSTANCE.aerolineaToGetAerolinea(aerolineaRepository.save(aerolineaFromDb));
     }
 
     @Override
