@@ -25,7 +25,7 @@ public class AerolineaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetAerolinea>> getAllAerolineas(@RequestParam String name){
+    public ResponseEntity<List<GetAerolinea>> getAllAerolineas(@RequestParam(required = false) String name){
         if(StringUtils.hasText(name)){
             return ResponseEntity.ok(
                         aerolineaService.getAerolineaByName(name)
@@ -41,7 +41,7 @@ public class AerolineaController {
     public ResponseEntity<GetAerolinea> getAerolineaById(@PathVariable Long id){
         return aerolineaService.getAerolineaById(id)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new RuntimeException("Aerolinea "+id+" not found"));
+                .orElse(ResponseEntity.noContent().build());
     }
 
     @PostMapping
@@ -58,14 +58,18 @@ public class AerolineaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<GetAerolinea> updateAerolineaById(@RequestBody SaveAerolinea saveAerolinea, @PathVariable Long id){
-        Optional<GetAerolinea> oldAerolinea = aerolineaService.getAerolineaById(id);
+        GetAerolinea aerolinea;
 
-        return oldAerolinea.map( a -> ResponseEntity.ok(a))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        try{
+            aerolinea = aerolineaService.updateAerolineaById(id,saveAerolinea);
+            return ResponseEntity.ok(aerolinea);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAerolinea(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAerolinea(@PathVariable Long id) {try{
         aerolineaService.deleteAerolineaById(id);
         return ResponseEntity.noContent().build();
     }
