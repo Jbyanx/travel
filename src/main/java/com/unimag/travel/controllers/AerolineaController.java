@@ -1,5 +1,7 @@
 package com.unimag.travel.controllers;
 
+import com.unimag.travel.dto.request.SaveAerolinea;
+import com.unimag.travel.dto.response.GetAerolinea;
 import com.unimag.travel.entities.Aerolinea;
 import com.unimag.travel.services.AerolineaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ public class AerolineaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Aerolinea>> getAllAerolineas(@RequestParam String name){
+    public ResponseEntity<List<GetAerolinea>> getAllAerolineas(@RequestParam String name){
         if(StringUtils.hasText(name)){
             return ResponseEntity.ok(
                         aerolineaService.getAerolineaByName(name)
@@ -36,27 +38,27 @@ public class AerolineaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Aerolinea> getAerolineaById(@PathVariable Long id){
+    public ResponseEntity<GetAerolinea> getAerolineaById(@PathVariable Long id){
         return aerolineaService.getAerolineaById(id)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new RuntimeException("Aerolinea "+id+" not found"));
     }
 
     @PostMapping
-    public ResponseEntity<Aerolinea> createOneAerolinea(@RequestBody Aerolinea aerolinea){
-        Aerolinea createdAerolinea = aerolineaService.saveAerolinea(aerolinea);
+    public ResponseEntity<GetAerolinea> createOneAerolinea(@RequestBody SaveAerolinea saveAerolinea){
+        GetAerolinea createdAerolinea = aerolineaService.saveAerolinea(saveAerolinea);
 
         URI newLocation = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(createdAerolinea.getIdAerolinea())
+                .buildAndExpand(createdAerolinea.id())
                 .toUri();
 
         return ResponseEntity.created(newLocation).body(createdAerolinea);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Aerolinea> updateAerolineaById(@RequestBody Aerolinea aerolinea, @PathVariable Long id){
-        Optional<Aerolinea> oldAerolinea = aerolineaService.getAerolineaById(id);
+    public ResponseEntity<GetAerolinea> updateAerolineaById(@RequestBody SaveAerolinea saveAerolinea, @PathVariable Long id){
+        Optional<GetAerolinea> oldAerolinea = aerolineaService.getAerolineaById(id);
 
         return oldAerolinea.map( a -> ResponseEntity.ok(a))
                 .orElseGet(() -> ResponseEntity.notFound().build());
