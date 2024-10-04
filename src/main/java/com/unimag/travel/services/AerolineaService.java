@@ -1,5 +1,7 @@
 package com.unimag.travel.services;
 
+import com.unimag.travel.dto.request.SaveAerolinea;
+import com.unimag.travel.dto.response.GetAerolinea;
 import com.unimag.travel.entities.Aerolinea;
 
 import java.util.List;
@@ -7,15 +9,15 @@ import java.util.Optional;
 
 public interface AerolineaService {
 
-    Optional<Aerolinea> getAerolineaById(Long id);
+    Optional<GetAerolinea> getAerolineaById(Long id);
 
-    Optional<Aerolinea> getAerolineaByName(String name);
+    Optional<GetAerolinea> getAerolineaByName(String name);
 
-    List<Aerolinea> getAllAerolineas();
+    List<GetAerolinea> getAllAerolineas();
 
-    Aerolinea saveAerolinea(Aerolinea aerolinea);
+    GetAerolinea saveAerolinea(SaveAerolinea saveAerolinea);
 
-    Aerolinea updateAerolineaById(Long id, Aerolinea saveAerolinea);
+    GetAerolinea updateAerolineaById(Long id, SaveAerolinea saveAerolinea);
 
     void deleteAerolineaById(Long id);
 }
