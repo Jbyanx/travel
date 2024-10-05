@@ -14,7 +14,7 @@ public interface ReservaService {
 
     List<GetReserva> getAllReservas();
 
-    GetReserva saveReserva(SaveReserva saveReserva);
+    GetReserva createReserva(SaveReserva saveReserva);
 
     GetReserva updateReservaById(Long id, SaveReserva saveReserva);
 
