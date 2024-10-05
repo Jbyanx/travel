@@ -1,5 +1,7 @@
 package com.unimag.travel.services;
 
+import com.unimag.travel.dto.request.SaveEscala;
+import com.unimag.travel.dto.response.GetEscala;
 import com.unimag.travel.entities.Escala;
 
 import java.util.List;
@@ -7,13 +9,13 @@ import java.util.Optional;
 
 public interface EscalaService {
 
-    Optional<Escala> getEscalaById(Long id);
+    Optional<GetEscala> getEscalaById(Long id);
 
-    List<Escala> getAllEscalas();
+    List<GetEscala> getAllEscalas();
 
-    Escala saveEscala(Escala escala);
+    GetEscala saveEscala(SaveEscala saveEscala);
 
-    Escala updateEscalaById(Long id, Escala saveEscala);
+    GetEscala updateEscalaById(Long id, SaveEscala saveEscala);
 
     void deleteEscalaById(Long id);
 }
