@@ -38,7 +38,7 @@ public class ReservaController {
 
     @PostMapping
     public ResponseEntity<GetReserva> createOneReserva(@RequestBody SaveReserva saveReserva){
-        GetReserva createdReserva = reservaService.saveReserva(saveReserva);
+        GetReserva createdReserva = reservaService.createReserva(saveReserva);
 
         URI newLocation = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
