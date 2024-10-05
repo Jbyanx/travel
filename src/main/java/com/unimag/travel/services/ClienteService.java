@@ -1,5 +1,7 @@
 package com.unimag.travel.services;
 
+import com.unimag.travel.dto.request.SaveCliente;
+import com.unimag.travel.dto.response.GetCliente;
 import com.unimag.travel.entities.Cliente;
 
 import java.util.List;
@@ -7,15 +9,15 @@ import java.util.Optional;
 
 public interface ClienteService {
 
-    Optional<Cliente> getClienteById(Long id);
+    Optional<GetCliente> getClienteById(Long id);
 
-    Optional<Cliente> getClienteByName(String name);
+    Optional<GetCliente> getClienteByName(String name);
 
-    List<Cliente> getAllClientes();
+    List<GetCliente> getAllClientes();
 
-    Cliente saveCliente(Cliente cliente);
+    GetCliente saveCliente(SaveCliente saveCliente);
 
-    Cliente updateClienteById(Long id, Cliente saveCliente);
+    GetCliente updateClienteById(Long id, SaveCliente saveCliente);
 
     void deleteClienteById(Long id);
 }
