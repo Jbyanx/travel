@@ -2,7 +2,6 @@ package com.unimag.travel.controllers;
 
 import com.unimag.travel.dto.request.SaveAerolinea;
 import com.unimag.travel.dto.response.GetAerolinea;
-import com.unimag.travel.entities.Aerolinea;
 import com.unimag.travel.services.AerolineaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/aerolineas")
