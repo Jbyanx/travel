@@ -8,6 +8,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper(uses = {AeroPuertoMapper.class, VueloMapper.class})
 public interface EscalaMapper {
     EscalaMapper INSTANCE = Mappers.getMapper(EscalaMapper.class);
@@ -21,6 +23,9 @@ public interface EscalaMapper {
     @InheritConfiguration
     Escala saveEscalaToEscala(SaveEscala saveEscala);
 
+    List<SaveEscala> escalaListToSaveEscalaList(List<Escala> escalaList);
+    List<Escala> saveEscalaListToEscalaList(List<SaveEscala> saveEscalaList);
+
     //Get Escala
     @Mapping(target = "id", source = "idEscala")
     @Mapping(target = "duracion", source = "tiempoDeEscala")
@@ -28,4 +33,7 @@ public interface EscalaMapper {
 
     @InheritConfiguration
     Escala getEscalaToEscala(GetEscala getEscala);
+
+    List<GetEscala> escalaListToGetEscalaList(List<Escala> escalaList);
+    List<Escala> getEscalaListToEscalaList(List<GetEscala> getEscalaList);
 }
