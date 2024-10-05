@@ -2,7 +2,6 @@ package com.unimag.travel.services;
 
 import com.unimag.travel.dto.request.SaveCliente;
 import com.unimag.travel.dto.response.GetCliente;
-import com.unimag.travel.entities.Cliente;
 
 import java.util.List;
 import java.util.Optional;
