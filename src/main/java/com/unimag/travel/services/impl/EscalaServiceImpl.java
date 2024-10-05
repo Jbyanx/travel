@@ -1,6 +1,9 @@
 package com.unimag.travel.services.impl;
 
+import com.unimag.travel.dto.request.SaveEscala;
+import com.unimag.travel.dto.response.GetEscala;
 import com.unimag.travel.entities.Escala;
+import com.unimag.travel.mapper.EscalaMapper;
 import com.unimag.travel.repositories.EscalaRepository;
 import com.unimag.travel.services.EscalaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,32 +23,35 @@ public class EscalaServiceImpl implements EscalaService {
 
 
     @Override
-    public Optional<Escala> getEscalaById(Long id) {
-        return escalaRepository.findById(id);
+    public Optional<GetEscala> getEscalaById(Long id) {
+        return escalaRepository.findById(id).map(EscalaMapper.INSTANCE::escalaToGetEscala);
     }
 
 
     @Override
-    public List<Escala> getAllEscalas() {
-        return escalaRepository.findAll();
+    public List<GetEscala> getAllEscalas() {
+        List<Escala> escalas = escalaRepository.findAll();
+        return EscalaMapper.INSTANCE.escalaListToGetEscalaList(escalas);
     }
 
     @Override
-    public Escala saveEscala(Escala escala) {
-        return escalaRepository.save(escala);
+    public GetEscala saveEscala(SaveEscala saveEscala) {
+        Escala escalaToSave = EscalaMapper.INSTANCE.saveEscalaToEscala(saveEscala);
+        Escala escalaSaved = escalaRepository.save(escalaToSave);
+        return EscalaMapper.INSTANCE.escalaToGetEscala(escalaRepository.save(escalaSaved));
     }
 
     @Override
-    public Escala updateEscalaById(Long id, Escala saveEscala) {
+    public GetEscala updateEscalaById(Long id, SaveEscala saveEscala) {
         Escala escalaFromDb = escalaRepository.findById(id).get();
         if(escalaFromDb != null) {
-            escalaFromDb.setTiempoDeEscala(saveEscala.getTiempoDeEscala());
-            escalaFromDb.setAeropuerto(saveEscala.getAeropuerto());
-            escalaFromDb.setVuelo(saveEscala.getVuelo());
+            escalaFromDb.setTiempoDeEscala(saveEscala.duracion());
+            escalaFromDb.getAeropuerto().setIdAeropuerto(saveEscala.idAeropuerto());
+            escalaFromDb.getVuelo().setIdVuelo(saveEscala.idVuelo());
         }else{
             throw new RuntimeException("Escala not found");
         }
-        return escalaRepository.save(escalaFromDb);
+        return EscalaMapper.INSTANCE.escalaToGetEscala(escalaRepository.save(escalaFromDb));
     }
 
     @Override
