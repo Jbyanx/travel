@@ -1,21 +1,22 @@
 package com.unimag.travel.services;
 
-import com.unimag.travel.entities.Aeropuerto;
+import com.unimag.travel.dto.request.SaveAeropuerto;
+import com.unimag.travel.dto.response.GetAeropuerto;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface AeropuertoService {
 
-    Optional<Aeropuerto> getAeropuertoById(Long id);
+    Optional<GetAeropuerto> getAeropuertoById(Long id);
 
-    Optional<Aeropuerto> getAeropuertoByName(String name);
+    Optional<GetAeropuerto> getAeropuertoByName(String name);
 
-    List<Aeropuerto> getAllAeropuertos();
+    List<GetAeropuerto> getAllAeropuertos();
 
-    Aeropuerto saveAeropuerto(Aeropuerto aeropuerto);
+    GetAeropuerto saveAeropuerto(SaveAeropuerto saveAeropuerto);
 
-    Aeropuerto updateAeropuertoById(Long id, Aeropuerto saveAeropuerto);
+    GetAeropuerto updateAeropuertoById(Long id, SaveAeropuerto saveAeropuerto);
 
     void deleteAeropuertoById(Long id);
 }
