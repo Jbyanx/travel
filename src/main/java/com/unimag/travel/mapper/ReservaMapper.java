@@ -8,6 +8,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper(uses = {ClienteMapper.class, VueloMapper.class})
 public interface ReservaMapper {
     ReservaMapper INSTANCE = Mappers.getMapper(ReservaMapper.class);
@@ -19,9 +21,15 @@ public interface ReservaMapper {
     @InheritInverseConfiguration
     Reserva saveReservaToReserva(SaveReserva saveReserva);
 
+    List<SaveReserva> reservaListToSaveReservaList(List<Reserva> reservaList);
+    List<Reserva> saveReservaListToReservaList(List<SaveReserva> saveReservaList);
+
     @Mapping(source = "idReserva", target = "id")
     GetReserva reservaToGetReserva(Reserva reserva);
 
     @InheritInverseConfiguration
     Reserva getReservaToReserva(GetReserva getReserva);
+
+    List<GetReserva> reservaListToGetReservaList(List<Reserva> reservaList);
+    List<Reserva> getReservaListToGetReservaList(List<GetReserva> getReservaList);
 }
