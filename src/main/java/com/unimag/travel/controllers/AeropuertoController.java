@@ -1,5 +1,7 @@
 package com.unimag.travel.controllers;
 
+import com.unimag.travel.dto.request.SaveAeropuerto;
+import com.unimag.travel.dto.response.GetAeropuerto;
 import com.unimag.travel.entities.Aeropuerto;
 import com.unimag.travel.services.AeropuertoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,26 +22,27 @@ public class AeropuertoController {
     public AeropuertoController(AeropuertoService aeropuertoService){this.aeropuertoService=aeropuertoService;}
 
     @GetMapping
-    public ResponseEntity<List<Aeropuerto>> getAeropuertos(){
-        List<Aeropuerto> aeropuertos = aeropuertoService.getAllAeropuertos();
+    public ResponseEntity<List<GetAeropuerto>> getAeropuertos(){
+        List<GetAeropuerto> aeropuertos = aeropuertoService.getAllAeropuertos();
         return ResponseEntity.ok(aeropuertos);
     }
 
     @GetMapping("/{idAeropuetro}")
-    public ResponseEntity<Aeropuerto> getAeropuerto(@PathVariable Long idAeropuetro){
+    public ResponseEntity<GetAeropuerto> getAeropuerto(@PathVariable Long idAeropuetro){
         return aeropuertoService.getAeropuertoById(idAeropuetro)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/idAeropuerto")
-    public ResponseEntity<Aeropuerto> updateAeropuerto(@PathVariable Long idAeropuerto, @RequestBody Aeropuerto aeropuerto){
-        Optional<Aeropuerto> aeropuertoFromDb = Optional.of(aeropuertoService.updateAeropuertoById(idAeropuerto, aeropuerto));
+    public ResponseEntity<GetAeropuerto> updateAeropuerto(@PathVariable Long idAeropuerto, @RequestBody SaveAeropuerto saveAeropuerto){
+        try{
+            GetAeropuerto getAeropuerto = aeropuertoService.updateAeropuertoById(idAeropuerto, saveAeropuerto);
 
-        return aeropuertoFromDb.map(c -> ResponseEntity.ok(c))
-                .orElseGet(() -> {
-                    return ResponseEntity.notFound().build();
-                });
+            return ResponseEntity.ok(getAeropuerto);
+        } catch (RuntimeException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{iAeropuerto}")
@@ -48,14 +51,14 @@ public class AeropuertoController {
         return ResponseEntity.noContent().build();
     }
 
-    private ResponseEntity<Aeropuerto> crearAeropuerto(Aeropuerto aeropuerto) {
-        Aeropuerto newAeropuerto = aeropuertoService.saveAeropuerto(aeropuerto);
+    private ResponseEntity<GetAeropuerto> createAeropuerto(SaveAeropuerto saveAeropuerto) {
+        GetAeropuerto savedAeropuerto = aeropuertoService.saveAeropuerto(saveAeropuerto);
 
         URI newLocation = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newAeropuerto.getIdAeropuerto())
+                .buildAndExpand(savedAeropuerto.id())
                 .toUri();
 
-        return ResponseEntity.created(newLocation).body(newAeropuerto);
+        return ResponseEntity.created(newLocation).body(savedAeropuerto);
     }
 }
