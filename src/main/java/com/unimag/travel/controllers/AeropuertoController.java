@@ -51,7 +51,8 @@ public class AeropuertoController {
         return ResponseEntity.noContent().build();
     }
 
-    private ResponseEntity<GetAeropuerto> createAeropuerto(SaveAeropuerto saveAeropuerto) {
+    @PostMapping
+    private ResponseEntity<GetAeropuerto> createAeropuerto(@RequestBody SaveAeropuerto saveAeropuerto) {
         GetAeropuerto savedAeropuerto = aeropuertoService.saveAeropuerto(saveAeropuerto);
 
         URI newLocation = ServletUriComponentsBuilder.fromCurrentRequest()

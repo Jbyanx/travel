@@ -54,7 +54,8 @@ public class ClienteController {
         return ResponseEntity.noContent().build();
     }
 
-    private ResponseEntity<GetCliente> crearCliente(SaveCliente saveCliente) {
+    @PostMapping
+    private ResponseEntity<GetCliente> crearCliente(@RequestBody SaveCliente saveCliente) {
         Cliente newCliente = ClienteMapper.INSTANCE.getClienteToCliente(clienteService.saveCliente(saveCliente));
         //URI newLocation = URI.create("/clientes/"+newCliente.getIdCliente());
 
