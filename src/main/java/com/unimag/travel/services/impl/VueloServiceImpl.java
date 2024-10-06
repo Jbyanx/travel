@@ -1,6 +1,9 @@
 package com.unimag.travel.services.impl;
 
+import com.unimag.travel.dto.request.SaveVuelo;
+import com.unimag.travel.dto.response.GetVuelo;
 import com.unimag.travel.entities.Vuelo;
+import com.unimag.travel.mapper.VueloMapper;
 import com.unimag.travel.repositories.VueloRepository;
 import com.unimag.travel.services.VueloService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,38 +23,42 @@ public class VueloServiceImpl implements VueloService {
 
 
     @Override
-    public Optional<Vuelo> getVueloById(Long id) {
-        return vueloRepository.findById(id);
+    public Optional<GetVuelo> getVueloById(Long id) {
+        Optional<Vuelo> vueloOptional = vueloRepository.findById(id);
+        return vueloOptional.map(VueloMapper.INSTANCE::vueloToGetVuelo);
     }
 
     @Override
-    public List<Vuelo> getAllVuelos() {
-        return vueloRepository.findAll();
+    public List<GetVuelo> getAllVuelos() {
+        List<Vuelo> vueloList = vueloRepository.findAll();
+        return VueloMapper.INSTANCE.vueloListToGetVueloList(vueloList);
     }
 
     @Override
-    public Vuelo saveVuelo(Vuelo vuelo) {
-        return vueloRepository.save(vuelo);
+    public GetVuelo saveVuelo(SaveVuelo saveVuelo) {
+        Vuelo vueloToSave = VueloMapper.INSTANCE.saveVueloToVuelo(saveVuelo);
+        Vuelo vueloSaved = vueloRepository.save(vueloToSave);
+        return VueloMapper.INSTANCE.vueloToGetVuelo(vueloSaved);
     }
 
     @Override
-    public Vuelo updateVueloById(Long id, Vuelo saveVuelo) {
+    public GetVuelo updateVueloById(Long id, SaveVuelo saveVuelo) {
         Vuelo vueloFromDb = vueloRepository.findById(id).get();
         if (vueloFromDb != null) {
-            vueloFromDb.setAerolinea(vueloFromDb.getAerolinea());
-            vueloFromDb.setDestino(vueloFromDb.getDestino());
-            vueloFromDb.setDuracion(vueloFromDb.getDuracion());
-            vueloFromDb.setCapacidad(vueloFromDb.getCapacidad());
-            vueloFromDb.setAeropuertoDestino(vueloFromDb.getAeropuertoDestino());
-            vueloFromDb.setAeropuertoOrigen(vueloFromDb.getAeropuertoOrigen());
-            vueloFromDb.setEscalas(vueloFromDb.getEscalas());
-            vueloFromDb.setFechaDeSalida(vueloFromDb.getFechaDeSalida());
-            vueloFromDb.setHoraDeSalida(vueloFromDb.getHoraDeSalida());
-            vueloFromDb.setOrigen(vueloFromDb.getOrigen());
+            vueloFromDb.getAerolinea().setIdAerolinea(saveVuelo.idAerolinea());
+            vueloFromDb.setDestino(saveVuelo.destino());
+            vueloFromDb.setDuracion(saveVuelo.duracion());
+            vueloFromDb.setCapacidad(saveVuelo.capacidad());
+            vueloFromDb.getAeropuertoDestino().setIdAeropuerto(saveVuelo.idAeropuertoDestino());
+            vueloFromDb.getAeropuertoOrigen().setIdAeropuerto(saveVuelo.idAeropuertoOrigen());
+            vueloFromDb.setFechaDeSalida(saveVuelo.fechaDeSalida());
+            vueloFromDb.setHoraDeSalida(saveVuelo.horaDeSalida());
+            vueloFromDb.setOrigen(saveVuelo.origen());
         } else{
             throw new RuntimeException("Vuelo no encontrado");
         }
-        return vueloRepository.save(saveVuelo);
+        Vuelo vueloSaved = vueloRepository.save(vueloFromDb);
+        return VueloMapper.INSTANCE.vueloToGetVuelo(vueloSaved);
     }
 
     @Override
