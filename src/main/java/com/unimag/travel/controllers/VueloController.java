@@ -1,5 +1,7 @@
 package com.unimag.travel.controllers;
 
+import com.unimag.travel.dto.request.SaveVuelo;
+import com.unimag.travel.dto.response.GetVuelo;
 import com.unimag.travel.entities.Vuelo;
 import com.unimag.travel.services.VueloService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,22 +22,22 @@ public class VueloController {
     public VueloController(VueloService vueloService) {this.vueloService = vueloService;}
 
     @GetMapping
-    public ResponseEntity<List<Vuelo>> getAllVuelos() {
-        List<Vuelo> vuelos = vueloService.getAllVuelos();
+    public ResponseEntity<List<GetVuelo>> getAllVuelos() {
+        List<GetVuelo> vuelos = vueloService.getAllVuelos();
 
         return ResponseEntity.ok(vuelos);
     }
 
     @GetMapping("/{idVuelo}")
-    public ResponseEntity<Vuelo> getVueloById(@PathVariable Long idVuelo) {
+    public ResponseEntity<GetVuelo> getVueloById(@PathVariable Long idVuelo) {
         return vueloService.getVueloById(idVuelo)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{idCliente}")
-    public ResponseEntity<Vuelo> updateVuelo(@PathVariable Long idVuelo, @RequestBody Vuelo vuelo) {
-        Optional<Vuelo> vueloFromDb = Optional.of(vueloService.updateVueloById(idVuelo, vuelo));
+    public ResponseEntity<GetVuelo> updateVuelo(@PathVariable Long idVuelo, @RequestBody SaveVuelo saveVuelo) {
+        Optional<GetVuelo> vueloFromDb = Optional.of(vueloService.updateVueloById(idVuelo, saveVuelo));
 
         return vueloFromDb.map(c -> ResponseEntity.ok(c))
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -48,13 +50,13 @@ public class VueloController {
     }
 
 
-    private ResponseEntity<Vuelo> crearVuelo(Vuelo vuelo) {
-        Vuelo newVuelo = vueloService.saveVuelo(vuelo);
+    private ResponseEntity<GetVuelo> createVuelo(SaveVuelo saveVuelo) {
+        GetVuelo newVuelo = vueloService.saveVuelo(saveVuelo);
 
 
         URI newLocation = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newVuelo.getIdVuelo())
+                .buildAndExpand(newVuelo.id())
                 .toUri();
 
         return ResponseEntity.created(newLocation).body(newVuelo);
