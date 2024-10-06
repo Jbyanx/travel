@@ -1,5 +1,7 @@
 package com.unimag.travel.controllers;
 
+import com.unimag.travel.dto.request.SaveReserva;
+import com.unimag.travel.dto.response.GetReserva;
 import com.unimag.travel.entities.Reserva;
 import com.unimag.travel.services.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,32 +24,33 @@ public class ReservaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Reserva>> getAllReservas(){
-        return ResponseEntity.ok(reservaService.getAllReservas());
+    public ResponseEntity<List<GetReserva>> getAllReservas(){
+        List<GetReserva> reservaList = reservaService.getAllReservas();
+        return ResponseEntity.ok(reservaList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Reserva> getReservaById(@PathVariable Long id){
+    public ResponseEntity<GetReserva> getReservaById(@PathVariable Long id){
         return reservaService.getReservaById(id)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new RuntimeException("Reserva "+id+" not found"));
     }
 
     @PostMapping
-    public ResponseEntity<Reserva> createOneReserva(@RequestBody Reserva reserva){
-        Reserva createdReserva = reservaService.saveReserva(reserva);
+    public ResponseEntity<GetReserva> createOneReserva(@RequestBody SaveReserva saveReserva){
+        GetReserva createdReserva = reservaService.createReserva(saveReserva);
 
         URI newLocation = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(createdReserva.getIdReserva())
+                .buildAndExpand(createdReserva.id())
                 .toUri();
 
         return ResponseEntity.created(newLocation).body(createdReserva);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Reserva> updateReservaById(@RequestBody Reserva reserva, @PathVariable Long id){
-        Optional<Reserva> oldReserva = reservaService.getReservaById(id);
+    public ResponseEntity<GetReserva> updateReservaById(@RequestBody SaveReserva saveReserva, @PathVariable Long id){
+        Optional<GetReserva> oldReserva = reservaService.getReservaById(id);
 
         return oldReserva.map( r -> ResponseEntity.ok(r))
                 .orElseGet(() -> ResponseEntity.notFound().build());

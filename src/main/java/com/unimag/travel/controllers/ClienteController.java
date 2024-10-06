@@ -1,6 +1,9 @@
 package com.unimag.travel.controllers;
 
+import com.unimag.travel.dto.request.SaveCliente;
+import com.unimag.travel.dto.response.GetCliente;
 import com.unimag.travel.entities.Cliente;
+import com.unimag.travel.mapper.ClienteMapper;
 import com.unimag.travel.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +12,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/clientes")
@@ -22,31 +24,28 @@ public class ClienteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Cliente>> getAllClientes() {
-        List<Cliente> clientes = clienteService.getAllClientes();
+    public ResponseEntity<List<GetCliente>> getAllClientes() {
+        List<GetCliente> clientes = clienteService.getAllClientes();
 
         return ResponseEntity.ok(clientes);
     }
+
     @GetMapping("/{idCliente}")
-    public ResponseEntity<Cliente> getClienteById(@PathVariable Long idCliente) {
+    public ResponseEntity<GetCliente> getClienteById(@PathVariable Long idCliente) {
         return clienteService.getClienteById(idCliente) //transformamos el cliente en responseEntity con map
                 .map(ResponseEntity::ok)  // Si el cliente existe, retorna 200 OK con el cliente.
                 .orElse(ResponseEntity.notFound().build());  // Si el cliente no existe, retorna 404 Not Found.
     }
 
-    @PostMapping
-    public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) {
-        return crearCliente(cliente);
-    }
-
     @PutMapping("/{idCliente}")
-    public ResponseEntity<Cliente> updateCliente(@PathVariable Long idCliente, @RequestBody Cliente cliente) {
-        Optional<Cliente> clienteFromDb = Optional.of(clienteService.updateClienteById(idCliente, cliente));
+    public ResponseEntity<GetCliente> updateCliente(@PathVariable Long idCliente, @RequestBody SaveCliente saveCliente) {
+        try {
+            GetCliente clienteFromDb = clienteService.updateClienteById(idCliente, saveCliente);
 
-        return clienteFromDb.map(c -> ResponseEntity.ok(c))
-                .orElseGet(() -> {
-                    return crearCliente(cliente);
-                });
+            return ResponseEntity.ok(clienteFromDb);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{idCliente}")
@@ -55,8 +54,9 @@ public class ClienteController {
         return ResponseEntity.noContent().build();
     }
 
-    private ResponseEntity<Cliente> crearCliente(Cliente cliente) {
-        Cliente newCliente = clienteService.saveCliente(cliente);
+    @PostMapping
+    private ResponseEntity<GetCliente> crearCliente(@RequestBody SaveCliente saveCliente) {
+        Cliente newCliente = ClienteMapper.INSTANCE.getClienteToCliente(clienteService.saveCliente(saveCliente));
         //URI newLocation = URI.create("/clientes/"+newCliente.getIdCliente());
 
         URI newLocation = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -64,6 +64,7 @@ public class ClienteController {
                 .buildAndExpand(newCliente.getIdCliente())
                 .toUri();
 
-        return ResponseEntity.created(newLocation).body(newCliente);
+        GetCliente clienteSaved = ClienteMapper.INSTANCE.clienteToGetCliente(newCliente);
+        return ResponseEntity.created(newLocation).body(clienteSaved);
     }
 }
