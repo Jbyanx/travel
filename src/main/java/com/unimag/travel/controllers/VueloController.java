@@ -49,8 +49,8 @@ public class VueloController {
         return ResponseEntity.noContent().build();
     }
 
-
-    private ResponseEntity<GetVuelo> createVuelo(SaveVuelo saveVuelo) {
+    @PostMapping
+    private ResponseEntity<GetVuelo> createVuelo(@RequestBody SaveVuelo saveVuelo) {
         GetVuelo newVuelo = vueloService.saveVuelo(saveVuelo);
 
 
