@@ -3,6 +3,7 @@ package com.unimag.travel.services.impl;
 import com.unimag.travel.dto.request.SaveCliente;
 import com.unimag.travel.dto.response.GetCliente;
 import com.unimag.travel.entities.Cliente;
+import com.unimag.travel.exception.ClienteNotFoundException;
 import com.unimag.travel.mapper.ClienteMapper;
 import com.unimag.travel.repositories.ClienteRepository;
 import com.unimag.travel.services.ClienteService;
@@ -23,14 +24,17 @@ public class ClienteServiceImpl implements ClienteService {
 
 
     @Override
-    public Optional<GetCliente> getClienteById(Long id) {
-        Optional<Cliente> clienteOptional = clienteRepository.findById(id);
-        return clienteOptional.map(ClienteMapper.INSTANCE::clienteToGetCliente);
+    public GetCliente getClienteById(Long id) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente con id: "+ id +" no encontrado"));
+        return ClienteMapper.INSTANCE.clienteToGetCliente(cliente);
     }
 
     @Override
-    public Optional<GetCliente> getClienteByName(String name) {
-        return clienteRepository.getClienteByNombre(name).map(ClienteMapper.INSTANCE::clienteToGetCliente);
+    public GetCliente getClienteByName(String name) {
+        Cliente cliente = clienteRepository.getClienteByNombre(name)
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente con nombre: "+ name +" no encontrado"));
+        return ClienteMapper.INSTANCE.clienteToGetCliente(cliente);
     }
 
     @Override
@@ -48,7 +52,8 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public GetCliente updateClienteById(Long id, SaveCliente saveCliente) {
-        Cliente clienteFromDb = clienteRepository.findById(id).get();
+        Cliente clienteFromDb = clienteRepository.findById(id)
+                .orElseThrow(()->new ClienteNotFoundException("Cliente con id: "+id+" no encontrado"));
         if (clienteFromDb != null) {
             clienteFromDb.setNombre(saveCliente.nombre());
             clienteFromDb.setApellido(saveCliente.apellido());
