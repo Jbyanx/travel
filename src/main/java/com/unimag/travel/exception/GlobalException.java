@@ -5,6 +5,7 @@ import com.unimag.travel.entities.Vuelo;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -24,6 +25,23 @@ import java.util.List;
 
 @ControllerAdvice
 public class GlobalException {
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorMessage> dataIntegrityViolationExceptionHandler(DataIntegrityViolationException dataIntegrityViolationException,
+                                                                               HttpServletRequest request,
+                                                                               HttpServletResponse response) {
+        int status = HttpStatus.CONTINUE.value();
+
+        ErrorMessage errorMessage = new ErrorMessage(
+                status,
+                request.getRequestURL().toString(),
+                request.getMethod(),
+                "",
+                dataIntegrityViolationException.getMessage(),
+                LocalDateTime.now(ZoneId.systemDefault()),
+                null
+        );
+        return ResponseEntity.status(status).body(errorMessage);
+    }
 
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorMessage> HttpMessageNotReadableHandler(HttpMessageNotReadableException httpMessageNotReadableException,
@@ -32,9 +50,16 @@ public class GlobalException {
         int status = HttpStatus.BAD_REQUEST.value();
 
         ErrorMessage errorMessage = new ErrorMessage(
-
+            status,
+                request.getRequestURL().toString(),
+                request.getMethod(),
+                "Hubo un problema con el formato de los datos enviados, " +
+                        "Por favor, revise la estructura del mensaje y vuelva a intentarlo",
+                httpMessageNotReadableException.getMessage(),
+                LocalDateTime.now(ZoneId.systemDefault()),
+                null
         );
-
+        return ResponseEntity.status(status).body(errorMessage);
     }
 
     @ExceptionHandler(value = {HttpMediaTypeNotSupportedException.class})
