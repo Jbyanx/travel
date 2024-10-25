@@ -29,7 +29,7 @@ public class GlobalException {
     public ResponseEntity<ErrorMessage> dataIntegrityViolationExceptionHandler(DataIntegrityViolationException dataIntegrityViolationException,
                                                                                HttpServletRequest request,
                                                                                HttpServletResponse response) {
-        int status = HttpStatus.CONTINUE.value();
+        int status = HttpStatus.CONFLICT.value();
 
         ErrorMessage errorMessage = new ErrorMessage(
                 status,
