@@ -11,7 +11,6 @@ public interface VueloService {
 
     Optional<GetVuelo> getVueloById(Long id);
 
-
     List<GetVuelo> getAllVuelos();
 
     GetVuelo saveVuelo(SaveVuelo saveVuelo);
