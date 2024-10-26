@@ -3,6 +3,7 @@ package com.unimag.travel.services.impl;
 import com.unimag.travel.dto.request.SaveAerolinea;
 import com.unimag.travel.dto.response.GetAerolinea;
 import com.unimag.travel.entities.Aerolinea;
+import com.unimag.travel.exception.AerolineaNotFoundException;
 import com.unimag.travel.mapper.AerolineaMapper;
 import com.unimag.travel.repositories.AerolineaRepository;
 import com.unimag.travel.services.AerolineaService;
@@ -23,14 +24,17 @@ public class AerolineaServiceImpl implements AerolineaService {
 
 
     @Override
-    public Optional<GetAerolinea> getAerolineaById(Long id) {
-        Optional<Aerolinea> aerolineaOptional = aerolineaRepository.findById(id);
-        return aerolineaOptional.map(AerolineaMapper.INSTANCE::aerolineaToGetAerolinea);
+    public GetAerolinea getAerolineaById(Long id) {
+        Aerolinea aerolinea = aerolineaRepository.findById(id)
+                .orElseThrow(() -> new AerolineaNotFoundException("Aerolinea "+id+" not found"));
+        return AerolineaMapper.INSTANCE.aerolineaToGetAerolinea(aerolinea);
     }
 
     @Override
-    public Optional<GetAerolinea> getAerolineaByName(String name) {
-        return aerolineaRepository.getAerolineaByNombre(name).map(AerolineaMapper.INSTANCE::aerolineaToGetAerolinea);
+    public GetAerolinea getAerolineaByName(String name) {
+        Aerolinea aerolinea = aerolineaRepository.getAerolineaByNombre(name)
+                .orElseThrow(() -> new AerolineaNotFoundException("Aerolinea "+name+" not found"));
+        return AerolineaMapper.INSTANCE.aerolineaToGetAerolinea(aerolinea);
     }
 
     @Override
@@ -51,16 +55,14 @@ public class AerolineaServiceImpl implements AerolineaService {
     @Override
     public GetAerolinea updateAerolineaById(Long id, SaveAerolinea saveAerolinea) {
         Aerolinea newAerolinea = AerolineaMapper.INSTANCE.saveAerolineaToAerolinea(saveAerolinea);
-        Aerolinea aerolineaFromDb = aerolineaRepository.findById(id).get();
+        Aerolinea aerolineaFromDb = aerolineaRepository.findById(id)
+                .orElseThrow(() -> new AerolineaNotFoundException("aerolinea "+id+" not found"));
 
-        if(aerolineaFromDb != null) {
-            aerolineaFromDb.setNombre(newAerolinea.getNombre());
-            aerolineaFromDb.setPaisDeOrigen(newAerolinea.getPaisDeOrigen());
-            aerolineaFromDb.setVuelos(newAerolinea.getVuelos());
-            aerolineaFromDb.setCodigoDeAerolinea(newAerolinea.getCodigoDeAerolinea());
-        } else {
-            throw new RuntimeException("Aerolinea ID:" +id + " not found");
-        }
+        aerolineaFromDb.setNombre(newAerolinea.getNombre());
+        aerolineaFromDb.setPaisDeOrigen(newAerolinea.getPaisDeOrigen());
+        aerolineaFromDb.setVuelos(newAerolinea.getVuelos());
+        aerolineaFromDb.setCodigoDeAerolinea(newAerolinea.getCodigoDeAerolinea());
+
         return AerolineaMapper.INSTANCE.aerolineaToGetAerolinea(aerolineaRepository.save(aerolineaFromDb));
     }
 

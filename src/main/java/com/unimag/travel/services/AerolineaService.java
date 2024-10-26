@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public interface AerolineaService {
 
-    Optional<GetAerolinea> getAerolineaById(Long id);
+    GetAerolinea getAerolineaById(Long id);
 
-    Optional<GetAerolinea> getAerolineaByName(String name);
+    GetAerolinea getAerolineaByName(String name);
 
     List<GetAerolinea> getAllAerolineas();
 
