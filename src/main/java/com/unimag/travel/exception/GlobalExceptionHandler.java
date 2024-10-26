@@ -96,7 +96,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(ZoneId.systemDefault()),
                 null
         );
-        return null;
+        return ResponseEntity.status(status).body(errorMessage);
     }
 
     @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
