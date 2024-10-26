@@ -38,13 +38,8 @@ public class ClienteController {
 
     @PutMapping("/{idCliente}")
     public ResponseEntity<GetCliente> updateCliente(@PathVariable Long idCliente, @RequestBody SaveCliente saveCliente) {
-        try {
-            GetCliente clienteFromDb = clienteService.updateClienteById(idCliente, saveCliente);
-
-            return ResponseEntity.ok(clienteFromDb);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        GetCliente clienteFromDb = clienteService.updateClienteById(idCliente, saveCliente);
+        return ResponseEntity.ok(clienteFromDb);
     }
 
     @DeleteMapping("/{idCliente}")

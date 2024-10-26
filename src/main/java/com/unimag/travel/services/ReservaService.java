@@ -9,8 +9,7 @@ import java.util.Optional;
 
 public interface ReservaService {
 
-    Optional<GetReserva> getReservaById(Long id);
-
+    GetReserva getReservaById(Long id);
 
     List<GetReserva> getAllReservas();
 

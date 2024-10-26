@@ -31,9 +31,7 @@ public class ReservaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GetReserva> getReservaById(@PathVariable Long id){
-        return reservaService.getReservaById(id)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new RuntimeException("Reserva "+id+" not found"));
+        return ResponseEntity.ok(reservaService.getReservaById(id));
     }
 
     @PostMapping
@@ -50,10 +48,7 @@ public class ReservaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<GetReserva> updateReservaById(@RequestBody SaveReserva saveReserva, @PathVariable Long id){
-        Optional<GetReserva> oldReserva = reservaService.getReservaById(id);
-
-        return oldReserva.map( r -> ResponseEntity.ok(r))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(reservaService.updateReservaById(id, saveReserva));
     }
 
     @DeleteMapping("/{id}")

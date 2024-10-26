@@ -3,6 +3,7 @@ package com.unimag.travel.services.impl;
 import com.unimag.travel.dto.request.SaveAeropuerto;
 import com.unimag.travel.dto.response.GetAeropuerto;
 import com.unimag.travel.entities.Aeropuerto;
+import com.unimag.travel.exception.AeropuertoNotFoundException;
 import com.unimag.travel.mapper.AeroPuertoMapper;
 import com.unimag.travel.repositories.AerolineaRepository;
 import com.unimag.travel.repositories.AeropuertoRepository;
@@ -24,14 +25,17 @@ public class AeropuertoServiceImpl implements AeropuertoService {
     }
 
     @Override
-    public Optional<GetAeropuerto> getAeropuertoById(Long id) {
-        Optional<Aeropuerto> aeropuertoOptional = aeropuertoRepository.findById(id);
-        return aeropuertoOptional.map(AeroPuertoMapper.INSTANCE::aeropuertoToGetAeropuerto);
+    public GetAeropuerto getAeropuertoById(Long id) {
+        Aeropuerto aeropuerto = aeropuertoRepository.findById(id)
+                .orElseThrow(()->new AeropuertoNotFoundException("aeropuerto id: "+id+" not found"));
+        return AeroPuertoMapper.INSTANCE.aeropuertoToGetAeropuerto(aeropuerto);
     }
 
     @Override
-    public Optional<GetAeropuerto> getAeropuertoByName(String name) {
-        return aeropuertoRepository.getAeropuertoByNombre(name).map(AeroPuertoMapper.INSTANCE::aeropuertoToGetAeropuerto);
+    public GetAeropuerto getAeropuertoByName(String name) {
+        Aeropuerto aeropuerto = aeropuertoRepository.getAeropuertoByNombre(name)
+                .orElseThrow(()-> new AeropuertoNotFoundException("aeropuerto nombre: "+name+" not found"));
+        return AeroPuertoMapper.INSTANCE.aeropuertoToGetAeropuerto(aeropuerto);
     }
 
     @Override
@@ -52,14 +56,13 @@ public class AeropuertoServiceImpl implements AeropuertoService {
 
     @Override
     public GetAeropuerto updateAeropuertoById(Long id, SaveAeropuerto saveAeropuerto) {
-        Aeropuerto aeropuertoFromDb = aeropuertoRepository.findById(id).get();
-        if(aeropuertoFromDb != null) {
-            aeropuertoFromDb.setNombre(saveAeropuerto.nombre());
-            aeropuertoFromDb.setCiudad(saveAeropuerto.ciudad());
-            aeropuertoFromDb.setPais(saveAeropuerto.pais());
-        } else {
-            throw new RuntimeException("Aeropuerto no encontrado");
-        }
+        Aeropuerto aeropuertoFromDb = aeropuertoRepository.findById(id)
+                .orElseThrow(()->new AeropuertoNotFoundException("aeropuerto id: "+id+" not found"));
+
+        aeropuertoFromDb.setNombre(saveAeropuerto.nombre());
+        aeropuertoFromDb.setCiudad(saveAeropuerto.ciudad());
+        aeropuertoFromDb.setPais(saveAeropuerto.pais());
+
         Aeropuerto aeropuertoSaved = aeropuertoRepository.save(aeropuertoFromDb);
 
         return AeroPuertoMapper.INSTANCE.aeropuertoToGetAeropuerto(aeropuertoSaved);

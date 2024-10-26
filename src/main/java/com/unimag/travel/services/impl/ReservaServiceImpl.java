@@ -3,6 +3,7 @@ package com.unimag.travel.services.impl;
 import com.unimag.travel.dto.request.SaveReserva;
 import com.unimag.travel.dto.response.GetReserva;
 import com.unimag.travel.entities.Reserva;
+import com.unimag.travel.exception.ReservaNotFoundException;
 import com.unimag.travel.mapper.ReservaMapper;
 import com.unimag.travel.repositories.ReservaRepository;
 import com.unimag.travel.services.ReservaService;
@@ -24,9 +25,10 @@ public class ReservaServiceImpl implements ReservaService {
 
 
     @Override
-    public Optional<GetReserva> getReservaById(Long id) {
-        Optional<Reserva> reservaOptional = reservaRepository.findById(id);
-        return reservaOptional.map(ReservaMapper.INSTANCE::reservaToGetReserva);
+    public GetReserva getReservaById(Long id) {
+        Reserva reserva = reservaRepository.findById(id)
+                .orElseThrow( () -> new ReservaNotFoundException("reserva id: "+id+" not found"));
+        return ReservaMapper.INSTANCE.reservaToGetReserva(reserva);
     }
 
     @Override
@@ -45,15 +47,14 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public GetReserva updateReservaById(Long id, SaveReserva saveReserva) {
-        Reserva reservaFromDb = reservaRepository.findById(id).get();
-        if (reservaFromDb != null) {
-            reservaFromDb.setFechaDeReserva(saveReserva.fechaDeReserva());
-            reservaFromDb.getCliente().setIdCliente(saveReserva.idCliente());
-            reservaFromDb.getVuelo().setIdVuelo(saveReserva.idVuelo());
-            reservaFromDb.setNumeroDePasajeros(saveReserva.numeroDePasajeros());
-        } else{
-            throw new RuntimeException("reserva not found");
-        }
+        Reserva reservaFromDb = reservaRepository.findById(id)
+                .orElseThrow(() -> new ReservaNotFoundException("reserva id: "+id+" not found"));
+
+        reservaFromDb.setFechaDeReserva(saveReserva.fechaDeReserva());
+        reservaFromDb.getCliente().setIdCliente(saveReserva.idCliente());
+        reservaFromDb.getVuelo().setIdVuelo(saveReserva.idVuelo());
+        reservaFromDb.setNumeroDePasajeros(saveReserva.numeroDePasajeros());
+
         return ReservaMapper.INSTANCE.reservaToGetReserva(reservaRepository.save(reservaFromDb));
     }
 

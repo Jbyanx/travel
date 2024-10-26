@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface AeropuertoService {
 
-    Optional<GetAeropuerto> getAeropuertoById(Long id);
+    GetAeropuerto getAeropuertoById(Long id);
 
-    Optional<GetAeropuerto> getAeropuertoByName(String name);
+    GetAeropuerto getAeropuertoByName(String name);
 
     List<GetAeropuerto> getAllAeropuertos();
 
