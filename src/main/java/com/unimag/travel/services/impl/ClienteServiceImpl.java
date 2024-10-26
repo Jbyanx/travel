@@ -54,15 +54,13 @@ public class ClienteServiceImpl implements ClienteService {
     public GetCliente updateClienteById(Long id, SaveCliente saveCliente) {
         Cliente clienteFromDb = clienteRepository.findById(id)
                 .orElseThrow(()->new ClienteNotFoundException("Cliente con id: "+id+" no encontrado"));
-        if (clienteFromDb != null) {
-            clienteFromDb.setNombre(saveCliente.nombre());
-            clienteFromDb.setApellido(saveCliente.apellido());
-            clienteFromDb.setDireccion(saveCliente.direccion());
-            clienteFromDb.setTelefono(saveCliente.telefono());
-            clienteFromDb.setCorreoElectronico(saveCliente.correoElectronico());
-        } else{
-            throw new RuntimeException("Cliente no encontrado");
-        }
+
+        clienteFromDb.setNombre(saveCliente.nombre());
+        clienteFromDb.setApellido(saveCliente.apellido());
+        clienteFromDb.setDireccion(saveCliente.direccion());
+        clienteFromDb.setTelefono(saveCliente.telefono());
+        clienteFromDb.setCorreoElectronico(saveCliente.correoElectronico());
+
         return ClienteMapper.INSTANCE.clienteToGetCliente(clienteRepository.save(clienteFromDb));
     }
 
