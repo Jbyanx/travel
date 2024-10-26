@@ -12,20 +12,20 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorMessage> dataIntegrityViolationExceptionHandler(DataIntegrityViolationException dataIntegrityViolationException,
-                                                                               HttpServletRequest request,
-                                                                               HttpServletResponse response) {
+                                                                               HttpServletRequest request) {
         int status = HttpStatus.CONFLICT.value();
 
         ErrorMessage errorMessage = new ErrorMessage(
@@ -42,8 +42,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorMessage> HttpMessageNotReadableHandler(HttpMessageNotReadableException httpMessageNotReadableException,
-                                                                      HttpServletRequest request,
-                                                                      HttpServletResponse response){
+                                                                      HttpServletRequest request){
         int status = HttpStatus.BAD_REQUEST.value();
 
         ErrorMessage errorMessage = new ErrorMessage(
@@ -61,8 +60,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {HttpMediaTypeNotSupportedException.class})
     public ResponseEntity<ErrorMessage> httpMediaTypeNotSupportedHandler(HttpMediaTypeNotSupportedException httpMediaTypeNotSupportedException,
-                                                                         HttpServletRequest request,
-                                                                         HttpServletResponse response){
+                                                                         HttpServletRequest request){
         int status = HttpStatus.UNSUPPORTED_MEDIA_TYPE.value();
         String mediaTypeSent = httpMediaTypeNotSupportedException.getContentType().toString();
         String mediaTypesSupported = httpMediaTypeNotSupportedException.getSupportedMediaTypes().toString();
@@ -83,8 +81,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class})
     public ResponseEntity<ErrorMessage> httpRequestMethodNotSupportedHandler(HttpRequestMethodNotSupportedException httpRequestMethodNotSupportedException,
-                                                                             HttpServletRequest request,
-                                                                             HttpServletResponse response){
+                                                                             HttpServletRequest request){
         int status = HttpStatus.METHOD_NOT_ALLOWED.value();
 
         ErrorMessage errorMessage = new ErrorMessage(
@@ -101,8 +98,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ErrorMessage> methodArgumentTypeMismatchHandler(MethodArgumentTypeMismatchException methodArgumentTypeMismatchException,
-                                                                      HttpServletRequest request,
-                                                                      HttpServletResponse response)
+                                                                      HttpServletRequest request)
     {
         int status = HttpStatus.BAD_REQUEST.value();
         String property = methodArgumentTypeMismatchException.getPropertyName();
@@ -125,8 +121,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> methodArgumentNotValidHandler(MethodArgumentNotValidException methodArgumentNotValidException,
-                                                                      HttpServletRequest request,
-                                                                      HttpServletResponse response){
+                                                                      HttpServletRequest request){
         int status = HttpStatus.BAD_REQUEST.value();
 
         List<ObjectError> errors = methodArgumentNotValidException.getAllErrors();
@@ -152,35 +147,36 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
     public ResponseEntity<ErrorMessage> resourceNotFoundHandler(ResourceNotFoundException ex,
-                                                              HttpServletRequest request,
-                                                              HttpServletResponse response) {
+                                                              HttpServletRequest request) {
 
         LocalDateTime timestamp = LocalDateTime.now(ZoneId.systemDefault());
 
         if(ex instanceof ClienteNotFoundException clienteNotFoundException){//cliente
-            return handleClienteNotFoundException(clienteNotFoundException, request, response, timestamp);
+            return handleClienteNotFoundException(clienteNotFoundException, request,  timestamp);
 
         } else if(ex instanceof AerolineaNotFoundException aerolineaNotFoundException){//aerolinea
-            return handleAerolineaNotFoundException(aerolineaNotFoundException, request, response, timestamp);
+            return handleAerolineaNotFoundException(aerolineaNotFoundException, request,  timestamp);
 
         }else if(ex instanceof AeropuertoNotFoundException aeropuertoNotFoundException){//aeropuerto
-            return handleAeropuertoNotFoundException(aeropuertoNotFoundException, request, response, timestamp);
+            return handleAeropuertoNotFoundException(aeropuertoNotFoundException, request,  timestamp);
 
         }else if(ex instanceof EscalaNotFoundException escalaNotFoundException){//escala
-            return handleEscalaNotFoundException(escalaNotFoundException, request, response, timestamp);
+            return handleEscalaNotFoundException(escalaNotFoundException, request,  timestamp);
 
         }else if(ex instanceof ReservaNotFoundException reservaNotFoundException){//reserva
-            return handleReservaNotFoundException(reservaNotFoundException, request, response, timestamp);
+            return handleReservaNotFoundException(reservaNotFoundException, request,  timestamp);
 
         }else if(ex instanceof VueloNotFoundException vueloNotFoundException){//vuelo
-            return handleVueloNotFoundException(vueloNotFoundException, request, response, timestamp);
+            return handleVueloNotFoundException(vueloNotFoundException, request, timestamp);
 
         }else {
-            return handleResourceNotFoundException(ex, request, response, timestamp);//recurso generico
+            return handleResourceNotFoundException(ex, request, timestamp);//recurso generico
         }
     }
 
-    private ResponseEntity<ErrorMessage> handleResourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request, HttpServletResponse response, LocalDateTime timestamp) {
+    private ResponseEntity<ErrorMessage> handleResourceNotFoundException(ResourceNotFoundException ex,
+                                                                         HttpServletRequest request,
+                                                                         LocalDateTime timestamp) {
         int status = HttpStatus.NOT_FOUND.value();
 
         ErrorMessage errorMessage = new ErrorMessage(
@@ -196,7 +192,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 
-    private ResponseEntity<ErrorMessage> handleVueloNotFoundException(VueloNotFoundException vueloNotFoundException, HttpServletRequest request, HttpServletResponse response, LocalDateTime timestamp) {
+    private ResponseEntity<ErrorMessage> handleVueloNotFoundException(VueloNotFoundException vueloNotFoundException,
+                                                                      HttpServletRequest request,
+                                                                      LocalDateTime timestamp) {
         int status = HttpStatus.NOT_FOUND.value();
 
         ErrorMessage errorMessage = new ErrorMessage(
@@ -212,7 +210,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 
-    private ResponseEntity<ErrorMessage> handleReservaNotFoundException(ReservaNotFoundException reservaNotFoundException, HttpServletRequest request, HttpServletResponse response, LocalDateTime timestamp) {
+    private ResponseEntity<ErrorMessage> handleReservaNotFoundException(ReservaNotFoundException reservaNotFoundException,
+                                                                        HttpServletRequest request,
+                                                                        LocalDateTime timestamp) {
         int status = HttpStatus.NOT_FOUND.value();
 
         ErrorMessage errorMessage = new ErrorMessage(
@@ -228,7 +228,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 
-    private ResponseEntity<ErrorMessage> handleEscalaNotFoundException(EscalaNotFoundException escalaNotFoundException, HttpServletRequest request, HttpServletResponse response, LocalDateTime timestamp) {
+    private ResponseEntity<ErrorMessage> handleEscalaNotFoundException(EscalaNotFoundException escalaNotFoundException,
+                                                                       HttpServletRequest request,
+                                                                       LocalDateTime timestamp) {
         int status = HttpStatus.NOT_FOUND.value();
 
         ErrorMessage errorMessage = new ErrorMessage(
@@ -244,7 +246,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 
-    private ResponseEntity<ErrorMessage> handleAeropuertoNotFoundException(AeropuertoNotFoundException aeropuertoNotFoundException, HttpServletRequest request, HttpServletResponse response, LocalDateTime timestamp) {
+    private ResponseEntity<ErrorMessage> handleAeropuertoNotFoundException(AeropuertoNotFoundException aeropuertoNotFoundException,
+                                                                           HttpServletRequest request,
+                                                                           LocalDateTime timestamp) {
         int status = HttpStatus.NOT_FOUND.value();
 
         ErrorMessage errorMessage = new ErrorMessage(
@@ -260,7 +264,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 
-    private ResponseEntity<ErrorMessage> handleAerolineaNotFoundException(AerolineaNotFoundException aerolineaNotFoundException, HttpServletRequest request, HttpServletResponse response, LocalDateTime timestamp) {
+    private ResponseEntity<ErrorMessage> handleAerolineaNotFoundException(AerolineaNotFoundException aerolineaNotFoundException,
+                                                                          HttpServletRequest request,
+                                                                          LocalDateTime timestamp) {
         int status = HttpStatus.NOT_FOUND.value();
 
         ErrorMessage errorMessage = new ErrorMessage(
@@ -278,7 +284,6 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<ErrorMessage> handleClienteNotFoundException(ClienteNotFoundException clienteNotFoundException,
                                                                         HttpServletRequest request,
-                                                                        HttpServletResponse response,
                                                                         LocalDateTime timestamp) {
         int status = HttpStatus.NOT_FOUND.value();
 
