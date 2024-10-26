@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
                 status,
                 request.getRequestURL().toString(),
                 request.getMethod(),
-                "",
+                "Error, hay un conflicto de integridad de datos, verifique si existen campos unicos",
                 dataIntegrityViolationException.getMessage(),
                 LocalDateTime.now(ZoneId.systemDefault()),
                 null
