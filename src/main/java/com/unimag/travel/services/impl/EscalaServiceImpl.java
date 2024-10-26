@@ -3,6 +3,7 @@ package com.unimag.travel.services.impl;
 import com.unimag.travel.dto.request.SaveEscala;
 import com.unimag.travel.dto.response.GetEscala;
 import com.unimag.travel.entities.Escala;
+import com.unimag.travel.exception.EscalaNotFoundException;
 import com.unimag.travel.mapper.EscalaMapper;
 import com.unimag.travel.repositories.EscalaRepository;
 import com.unimag.travel.services.EscalaService;
@@ -23,8 +24,10 @@ public class EscalaServiceImpl implements EscalaService {
 
 
     @Override
-    public Optional<GetEscala> getEscalaById(Long id) {
-        return escalaRepository.findById(id).map(EscalaMapper.INSTANCE::escalaToGetEscala);
+    public GetEscala getEscalaById(Long id) {
+        Escala escala = escalaRepository.findById(id)
+                .orElseThrow(() -> new EscalaNotFoundException("escala id:"+id+" not found"));
+        return EscalaMapper.INSTANCE.escalaToGetEscala(escala);
     }
 
 
@@ -43,14 +46,13 @@ public class EscalaServiceImpl implements EscalaService {
 
     @Override
     public GetEscala updateEscalaById(Long id, SaveEscala saveEscala) {
-        Escala escalaFromDb = escalaRepository.findById(id).get();
-        if(escalaFromDb != null) {
-            escalaFromDb.setTiempoDeEscala(saveEscala.duracion());
-            escalaFromDb.getAeropuerto().setIdAeropuerto(saveEscala.idAeropuerto());
-            escalaFromDb.getVuelo().setIdVuelo(saveEscala.idVuelo());
-        }else{
-            throw new RuntimeException("Escala not found");
-        }
+        Escala escalaFromDb = escalaRepository.findById(id)
+                .orElseThrow(() -> new EscalaNotFoundException("escala id:"+id+" not found"));
+
+        escalaFromDb.setTiempoDeEscala(saveEscala.duracion());
+        escalaFromDb.getAeropuerto().setIdAeropuerto(saveEscala.idAeropuerto());
+        escalaFromDb.getVuelo().setIdVuelo(saveEscala.idVuelo());
+
         return EscalaMapper.INSTANCE.escalaToGetEscala(escalaRepository.save(escalaFromDb));
     }
 

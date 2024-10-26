@@ -32,9 +32,7 @@ public class EscalaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GetEscala> getEscalaById(@PathVariable Long id){
-        return escalaService.getEscalaById(id)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new RuntimeException("Escala "+id+" not found"));
+        return ResponseEntity.ok(escalaService.getEscalaById(id));
     }
 
     @PostMapping
@@ -51,10 +49,7 @@ public class EscalaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<GetEscala> updateEscalaById(@RequestBody SaveEscala saveEscala, @PathVariable Long id){
-        Optional<GetEscala> oldEscala = escalaService.getEscalaById(id);
-
-        return oldEscala.map( e -> ResponseEntity.ok(e))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return  ResponseEntity.ok(escalaService.updateEscalaById(id, saveEscala));
     }
 
     @DeleteMapping("/{id}")
