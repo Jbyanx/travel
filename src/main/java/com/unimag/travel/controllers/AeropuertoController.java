@@ -29,20 +29,13 @@ public class AeropuertoController {
 
     @GetMapping("/{idAeropuetro}")
     public ResponseEntity<GetAeropuerto> getAeropuerto(@PathVariable Long idAeropuetro){
-        return aeropuertoService.getAeropuertoById(idAeropuetro)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(aeropuertoService.getAeropuertoById(idAeropuetro));
     }
 
     @PutMapping("/idAeropuerto")
     public ResponseEntity<GetAeropuerto> updateAeropuerto(@PathVariable Long idAeropuerto, @RequestBody SaveAeropuerto saveAeropuerto){
-        try{
-            GetAeropuerto getAeropuerto = aeropuertoService.updateAeropuertoById(idAeropuerto, saveAeropuerto);
-
-            return ResponseEntity.ok(getAeropuerto);
-        } catch (RuntimeException e){
-            return ResponseEntity.notFound().build();
-        }
+        GetAeropuerto getAeropuerto = aeropuertoService.updateAeropuertoById(idAeropuerto, saveAeropuerto);
+        return ResponseEntity.ok(getAeropuerto);
     }
 
     @DeleteMapping("/{iAeropuerto}")
