@@ -3,6 +3,7 @@ package com.unimag.travel.services.impl;
 import com.unimag.travel.dto.request.SaveVuelo;
 import com.unimag.travel.dto.response.GetVuelo;
 import com.unimag.travel.entities.Vuelo;
+import com.unimag.travel.exception.VueloNotFoundException;
 import com.unimag.travel.mapper.VueloMapper;
 import com.unimag.travel.repositories.VueloRepository;
 import com.unimag.travel.services.VueloService;
@@ -23,9 +24,10 @@ public class VueloServiceImpl implements VueloService {
 
 
     @Override
-    public Optional<GetVuelo> getVueloById(Long id) {
-        Optional<Vuelo> vueloOptional = vueloRepository.findById(id);
-        return vueloOptional.map(VueloMapper.INSTANCE::vueloToGetVuelo);
+    public GetVuelo getVueloById(Long id) {
+        Vuelo vuelo = vueloRepository.findById(id)
+                .orElseThrow( () -> new VueloNotFoundException("vuelo id:"+id+" not found"));
+        return VueloMapper.INSTANCE.vueloToGetVuelo(vuelo);
     }
 
     @Override
@@ -43,20 +45,19 @@ public class VueloServiceImpl implements VueloService {
 
     @Override
     public GetVuelo updateVueloById(Long id, SaveVuelo saveVuelo) {
-        Vuelo vueloFromDb = vueloRepository.findById(id).get();
-        if (vueloFromDb != null) {
-            vueloFromDb.getAerolinea().setIdAerolinea(saveVuelo.idAerolinea());
-            vueloFromDb.setDestino(saveVuelo.destino());
-            vueloFromDb.setDuracion(saveVuelo.duracion());
-            vueloFromDb.setCapacidad(saveVuelo.capacidad());
-            vueloFromDb.getAeropuertoDestino().setIdAeropuerto(saveVuelo.idAeropuertoDestino());
-            vueloFromDb.getAeropuertoOrigen().setIdAeropuerto(saveVuelo.idAeropuertoOrigen());
-            vueloFromDb.setFechaDeSalida(saveVuelo.fechaDeSalida());
-            vueloFromDb.setHoraDeSalida(saveVuelo.horaDeSalida());
-            vueloFromDb.setOrigen(saveVuelo.origen());
-        } else{
-            throw new RuntimeException("Vuelo no encontrado");
-        }
+        Vuelo vueloFromDb = vueloRepository.findById(id)
+                .orElseThrow(()->new VueloNotFoundException("vuelo id:"+id+" not found"));
+
+        vueloFromDb.getAerolinea().setIdAerolinea(saveVuelo.idAerolinea());
+        vueloFromDb.setDestino(saveVuelo.destino());
+        vueloFromDb.setDuracion(saveVuelo.duracion());
+        vueloFromDb.setCapacidad(saveVuelo.capacidad());
+        vueloFromDb.getAeropuertoDestino().setIdAeropuerto(saveVuelo.idAeropuertoDestino());
+        vueloFromDb.getAeropuertoOrigen().setIdAeropuerto(saveVuelo.idAeropuertoOrigen());
+        vueloFromDb.setFechaDeSalida(saveVuelo.fechaDeSalida());
+        vueloFromDb.setHoraDeSalida(saveVuelo.horaDeSalida());
+        vueloFromDb.setOrigen(saveVuelo.origen());
+
         Vuelo vueloSaved = vueloRepository.save(vueloFromDb);
         return VueloMapper.INSTANCE.vueloToGetVuelo(vueloSaved);
     }

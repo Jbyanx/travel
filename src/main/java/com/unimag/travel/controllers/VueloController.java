@@ -30,17 +30,12 @@ public class VueloController {
 
     @GetMapping("/{idVuelo}")
     public ResponseEntity<GetVuelo> getVueloById(@PathVariable Long idVuelo) {
-        return vueloService.getVueloById(idVuelo)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(vueloService.getVueloById(idVuelo));
     }
 
     @PutMapping("/{idCliente}")
     public ResponseEntity<GetVuelo> updateVuelo(@PathVariable Long idVuelo, @RequestBody SaveVuelo saveVuelo) {
-        Optional<GetVuelo> vueloFromDb = Optional.of(vueloService.updateVueloById(idVuelo, saveVuelo));
-
-        return vueloFromDb.map(c -> ResponseEntity.ok(c))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(vueloService.updateVueloById(idVuelo, saveVuelo));
     }
 
     @DeleteMapping("/{idVuelo}")

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface VueloService {
 
-    Optional<GetVuelo> getVueloById(Long id);
+    GetVuelo getVueloById(Long id);
 
     List<GetVuelo> getAllVuelos();
 
