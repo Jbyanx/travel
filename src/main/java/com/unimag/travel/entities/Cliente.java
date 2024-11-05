@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "clientes")
@@ -22,7 +24,7 @@ public class Cliente {
     private String apellido;
     private String direccion;
     private String telefono;
-    @Column(name = "correo_electronico")
+    @Column(name = "correo_electronico", unique = true)
     private String correoElectronico;
 
     @OneToMany(mappedBy = "cliente")
@@ -35,4 +37,12 @@ public class Cliente {
             inverseJoinColumns = @JoinColumn(name = "id_vuelo")
     )
     private List<Vuelo> vuelos;
+
+    private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "User_role",
+    joinColumns = @JoinColumn(name = "id_cliente"),
+    inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 }

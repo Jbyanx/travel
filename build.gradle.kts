@@ -35,6 +35,12 @@ dependencies {
 	implementation ("org.mapstruct:mapstruct:1.6.2")
 	annotationProcessor ("org.projectlombok:lombok-mapstruct-binding:0.2.0")
 	annotationProcessor ("org.mapstruct:mapstruct-processor:1.6.2")
+
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+	testImplementation("org.springframework.security:spring-security-test")
 }
 
 tasks.withType<Test> {
