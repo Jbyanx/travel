@@ -1,4 +1,4 @@
-package com.unimag.travel.security.Jwt;
+package com.unimag.travel.security.jwt;
 
 import com.unimag.travel.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;

@@ -1,4 +1,4 @@
-package com.unimag.travel.security.Jwt.exception;
+package com.unimag.travel.security.jwt.exception;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
