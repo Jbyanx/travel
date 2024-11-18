@@ -4,6 +4,7 @@ import com.unimag.travel.dto.request.SaveReserva;
 import com.unimag.travel.dto.response.GetReserva;
 import com.unimag.travel.entities.Reserva;
 import com.unimag.travel.services.ReservaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +38,7 @@ public class ReservaController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<GetReserva> createOneReserva(@RequestBody SaveReserva saveReserva){
+    public ResponseEntity<GetReserva> createOneReserva(@RequestBody @Valid SaveReserva saveReserva){
         GetReserva createdReserva = reservaService.createReserva(saveReserva);
 
         URI newLocation = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -50,7 +51,7 @@ public class ReservaController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<GetReserva> updateReservaById(@RequestBody SaveReserva saveReserva, @PathVariable Long id){
+    public ResponseEntity<GetReserva> updateReservaById(@RequestBody @Valid SaveReserva saveReserva, @PathVariable Long id){
         return ResponseEntity.ok(reservaService.updateReservaById(id, saveReserva));
     }
 

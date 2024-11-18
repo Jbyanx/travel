@@ -2,6 +2,7 @@ package com.unimag.travel.entities;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,12 +23,15 @@ public class Escala {
 
     @OneToOne
     @JoinColumn(name = "id_escala")
+    @NotNull
     private Vuelo vuelo;
 
     @OneToOne
     @JoinColumn(name = "id_escala")
+    @NotNull
     private Aeropuerto aeropuerto;
 
     @Column(name = "tiempo_de_escala")
+    @NotNull
     private Duration tiempoDeEscala;
 }

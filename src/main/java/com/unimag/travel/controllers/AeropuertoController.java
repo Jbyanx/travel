@@ -3,6 +3,7 @@ package com.unimag.travel.controllers;
 import com.unimag.travel.dto.request.SaveAeropuerto;
 import com.unimag.travel.dto.response.GetAeropuerto;
 import com.unimag.travel.services.AeropuertoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,7 +34,7 @@ public class AeropuertoController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/idAeropuerto")
-    public ResponseEntity<GetAeropuerto> updateAeropuerto(@PathVariable Long idAeropuerto, @RequestBody SaveAeropuerto saveAeropuerto){
+    public ResponseEntity<GetAeropuerto> updateAeropuerto(@PathVariable Long idAeropuerto, @RequestBody @Valid SaveAeropuerto saveAeropuerto){
         GetAeropuerto getAeropuerto = aeropuertoService.updateAeropuertoById(idAeropuerto, saveAeropuerto);
         return ResponseEntity.ok(getAeropuerto);
     }
@@ -47,7 +48,7 @@ public class AeropuertoController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    private ResponseEntity<GetAeropuerto> createAeropuerto(@RequestBody SaveAeropuerto saveAeropuerto) {
+    private ResponseEntity<GetAeropuerto> createAeropuerto(@RequestBody @Valid SaveAeropuerto saveAeropuerto) {
         GetAeropuerto savedAeropuerto = aeropuertoService.saveAeropuerto(saveAeropuerto);
 
         URI newLocation = ServletUriComponentsBuilder.fromCurrentRequest()

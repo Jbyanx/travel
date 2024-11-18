@@ -4,6 +4,7 @@ import com.unimag.travel.dto.request.SaveVuelo;
 import com.unimag.travel.dto.response.GetVuelo;
 import com.unimag.travel.entities.Vuelo;
 import com.unimag.travel.services.VueloService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,7 +37,7 @@ public class VueloController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{idCliente}")
-    public ResponseEntity<GetVuelo> updateVuelo(@PathVariable Long idVuelo, @RequestBody SaveVuelo saveVuelo) {
+    public ResponseEntity<GetVuelo> updateVuelo(@PathVariable Long idVuelo, @RequestBody @Valid SaveVuelo saveVuelo) {
         return ResponseEntity.ok(vueloService.updateVueloById(idVuelo, saveVuelo));
     }
 
@@ -49,7 +50,7 @@ public class VueloController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    private ResponseEntity<GetVuelo> createVuelo(@RequestBody SaveVuelo saveVuelo) {
+    private ResponseEntity<GetVuelo> createVuelo(@RequestBody @Valid SaveVuelo saveVuelo) {
         GetVuelo newVuelo = vueloService.saveVuelo(saveVuelo);
 
 

@@ -1,6 +1,9 @@
 package com.unimag.travel.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,11 +23,22 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCliente;
+    @NotBlank(message = "el nombre del cliente no debe ir vacio")
+    @Size(max = 100)
     private String nombre;
+    @NotBlank(message = "el apellido del cliente no debe ir vacio")
+    @Size(max = 100)
     private String apellido;
+    @NotBlank(message = "la direccion del cliente no debe ir vacia")
+    @Size(max = 100)
     private String direccion;
+    @NotBlank(message = "el telefono del cliente no debe ir vacio")
+    @Size(max = 100)
     private String telefono;
     @Column(name = "correo_electronico", unique = true)
+    @NotBlank(message = "el correo electronico del cliente no debe ir vacio")
+    @Size(max = 255)
+    @Email
     private String correoElectronico;
 
     @OneToMany(mappedBy = "cliente")
