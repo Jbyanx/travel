@@ -5,6 +5,7 @@ import com.unimag.travel.dto.response.GetAerolinea;
 import com.unimag.travel.services.AerolineaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -39,6 +40,7 @@ public class AerolineaController {
         return ResponseEntity.ok(aerolineaService.getAerolineaById(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<GetAerolinea> createOneAerolinea(@RequestBody SaveAerolinea saveAerolinea){
         GetAerolinea createdAerolinea = aerolineaService.saveAerolinea(saveAerolinea);
@@ -51,11 +53,13 @@ public class AerolineaController {
         return ResponseEntity.created(newLocation).body(createdAerolinea);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<GetAerolinea> updateAerolineaById(@RequestBody SaveAerolinea saveAerolinea, @PathVariable Long id){
         return ResponseEntity.ok(aerolineaService.updateAerolineaById(id,saveAerolinea));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAerolinea(@PathVariable Long id) {
         aerolineaService.deleteAerolineaById(id);
