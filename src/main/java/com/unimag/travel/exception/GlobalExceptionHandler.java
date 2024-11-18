@@ -7,6 +7,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -22,6 +24,41 @@ import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorMessage> handleAccessDeniedException(AccessDeniedException ex,
+                                                                    HttpServletRequest request) {
+        int status = HttpStatus.FORBIDDEN.value();
+
+        ErrorMessage errorMessage = new ErrorMessage(
+                status,
+                request.getRequestURL().toString(),
+                request.getMethod(),
+                "Acceso denegado: No tienes permisos para realizar esta acción.",
+                ex.getMessage(),
+                LocalDateTime.now(ZoneId.systemDefault()),
+                null
+        );
+        return ResponseEntity.status(status).body(errorMessage);
+    }
+
+    // Excepción para problemas de autenticación (401 Unauthorized)
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorMessage> handleAuthenticationException(AuthenticationException ex,
+                                                                      HttpServletRequest request) {
+        int status = HttpStatus.UNAUTHORIZED.value();
+
+        ErrorMessage errorMessage = new ErrorMessage(
+                status,
+                request.getRequestURL().toString(),
+                request.getMethod(),
+                "Autenticación fallida: Verifica tus credenciales e intenta nuevamente.",
+                ex.getMessage(),
+                LocalDateTime.now(ZoneId.systemDefault()),
+                null
+        );
+        return ResponseEntity.status(status).body(errorMessage);
+    }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorMessage> dataIntegrityViolationExceptionHandler(DataIntegrityViolationException dataIntegrityViolationException,
