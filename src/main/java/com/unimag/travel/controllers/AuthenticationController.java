@@ -8,7 +8,7 @@ import com.unimag.travel.entities.ERole;
 import com.unimag.travel.entities.Role;
 import com.unimag.travel.repositories.ClienteRepository;
 import com.unimag.travel.repositories.RoleRepository;
-import com.unimag.travel.security.Jwt.JwtUtil;
+import com.unimag.travel.security.jwt.JwtUtil;
 import com.unimag.travel.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +40,7 @@ public class AuthenticationController {
     private RoleRepository roleRepository;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.correoElectronico(), loginRequest.password())
         );
@@ -56,20 +57,24 @@ public class AuthenticationController {
         if(clienteRepository.existsByCorreoElectronico(sRequest.correoElectronico())) {
             return ResponseEntity.badRequest().body("Error: El correo ya existe");
         }
+
         Cliente cliente = new Cliente();
+        cliente.setNombre(sRequest.nombre());
+        cliente.setApellido(sRequest.apellido());
+        cliente.setDireccion(sRequest.direccion());
+        cliente.setTelefono(sRequest.telefono());
         cliente.setCorreoElectronico(sRequest.correoElectronico());
         cliente.setPassword(passwordEncoder.encode(sRequest.password()));
+
         Set<Role> roles = new HashSet<>();
+
         Role role = roleRepository.findByName(ERole.ROLE_USER)
                         .orElseThrow(() -> new RuntimeException("Error: El role no existe"));
-        roles.add(role);
-        cliente.setRoles(roles);
-        Cliente newCliente = clienteRepository.save(cliente);
-        return ResponseEntity.ok(newCliente);
-    }
 
-    @GetMapping("/mostrar")
-    public String prueba(){
-        return "hola";
+        roles.add(role);
+
+        cliente.setRoles(roles);
+        Cliente clienteSaved = clienteRepository.save(cliente);
+        return ResponseEntity.ok(clienteSaved);
     }
 }
