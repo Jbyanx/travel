@@ -4,8 +4,10 @@ import com.unimag.travel.dto.request.SaveVuelo;
 import com.unimag.travel.dto.response.GetVuelo;
 import com.unimag.travel.entities.Vuelo;
 import com.unimag.travel.services.VueloService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -33,19 +35,22 @@ public class VueloController {
         return ResponseEntity.ok(vueloService.getVueloById(idVuelo));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{idCliente}")
-    public ResponseEntity<GetVuelo> updateVuelo(@PathVariable Long idVuelo, @RequestBody SaveVuelo saveVuelo) {
+    public ResponseEntity<GetVuelo> updateVuelo(@PathVariable Long idVuelo, @RequestBody @Valid SaveVuelo saveVuelo) {
         return ResponseEntity.ok(vueloService.updateVueloById(idVuelo, saveVuelo));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{idVuelo}")
     public ResponseEntity<Void> deleteVuelo(@PathVariable Long idVuelo) {
         vueloService.deleteVueloById(idVuelo);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    private ResponseEntity<GetVuelo> createVuelo(@RequestBody SaveVuelo saveVuelo) {
+    private ResponseEntity<GetVuelo> createVuelo(@RequestBody @Valid SaveVuelo saveVuelo) {
         GetVuelo newVuelo = vueloService.saveVuelo(saveVuelo);
 
 

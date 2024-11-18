@@ -6,8 +6,10 @@ import com.unimag.travel.entities.Cliente;
 import com.unimag.travel.exception.ClienteNotFoundException;
 import com.unimag.travel.mapper.ClienteMapper;
 import com.unimag.travel.services.ClienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -36,20 +38,23 @@ public class ClienteController {
          return ResponseEntity.ok(getCliente);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{idCliente}")
-    public ResponseEntity<GetCliente> updateCliente(@PathVariable Long idCliente, @RequestBody SaveCliente saveCliente) {
+    public ResponseEntity<GetCliente> updateCliente(@PathVariable Long idCliente, @RequestBody @Valid SaveCliente saveCliente) {
         GetCliente clienteFromDb = clienteService.updateClienteById(idCliente, saveCliente);
         return ResponseEntity.ok(clienteFromDb);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{idCliente}")
     public ResponseEntity<Void> deleteCliente(@PathVariable Long idCliente) {
         clienteService.deleteClienteById(idCliente);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    private ResponseEntity<GetCliente> crearCliente(@RequestBody SaveCliente saveCliente) {
+    private ResponseEntity<GetCliente> crearCliente(@RequestBody @Valid SaveCliente saveCliente) {
         Cliente newCliente = ClienteMapper.INSTANCE.getClienteToCliente(clienteService.saveCliente(saveCliente));
         //URI newLocation = URI.create("/clientes/"+newCliente.getIdCliente());
 

@@ -3,6 +3,7 @@ package com.unimag.travel.controllers;
 import com.unimag.travel.dto.request.SaveAerolinea;
 import com.unimag.travel.dto.response.GetAerolinea;
 import com.unimag.travel.services.AerolineaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,7 +43,7 @@ public class AerolineaController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<GetAerolinea> createOneAerolinea(@RequestBody SaveAerolinea saveAerolinea){
+    public ResponseEntity<GetAerolinea> createOneAerolinea(@RequestBody @Valid SaveAerolinea saveAerolinea){
         GetAerolinea createdAerolinea = aerolineaService.saveAerolinea(saveAerolinea);
 
         URI newLocation = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -55,7 +56,7 @@ public class AerolineaController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<GetAerolinea> updateAerolineaById(@RequestBody SaveAerolinea saveAerolinea, @PathVariable Long id){
+    public ResponseEntity<GetAerolinea> updateAerolineaById(@RequestBody @Valid SaveAerolinea saveAerolinea, @PathVariable Long id){
         return ResponseEntity.ok(aerolineaService.updateAerolineaById(id,saveAerolinea));
     }
 
