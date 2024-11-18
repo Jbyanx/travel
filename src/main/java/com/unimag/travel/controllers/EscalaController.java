@@ -7,6 +7,7 @@ import com.unimag.travel.mapper.EscalaMapper;
 import com.unimag.travel.services.EscalaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -35,6 +36,7 @@ public class EscalaController {
         return ResponseEntity.ok(escalaService.getEscalaById(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<GetEscala> createOneEscala(@RequestBody SaveEscala saveEscala){
         GetEscala createdEscala = escalaService.saveEscala(saveEscala);
@@ -47,11 +49,13 @@ public class EscalaController {
         return ResponseEntity.created(newLocation).body(createdEscala);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<GetEscala> updateEscalaById(@RequestBody SaveEscala saveEscala, @PathVariable Long id){
         return  ResponseEntity.ok(escalaService.updateEscalaById(id, saveEscala));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEscala(@PathVariable Long id) {
         escalaService.deleteEscalaById(id);

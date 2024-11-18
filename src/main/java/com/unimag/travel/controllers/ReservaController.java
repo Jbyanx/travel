@@ -6,6 +6,7 @@ import com.unimag.travel.entities.Reserva;
 import com.unimag.travel.services.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -34,6 +35,7 @@ public class ReservaController {
         return ResponseEntity.ok(reservaService.getReservaById(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<GetReserva> createOneReserva(@RequestBody SaveReserva saveReserva){
         GetReserva createdReserva = reservaService.createReserva(saveReserva);
@@ -46,11 +48,13 @@ public class ReservaController {
         return ResponseEntity.created(newLocation).body(createdReserva);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<GetReserva> updateReservaById(@RequestBody SaveReserva saveReserva, @PathVariable Long id){
         return ResponseEntity.ok(reservaService.updateReservaById(id, saveReserva));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReserva(@PathVariable Long id) {
         reservaService.deleteReservaById(id);
