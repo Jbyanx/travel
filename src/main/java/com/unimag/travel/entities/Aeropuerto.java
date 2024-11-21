@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,11 +31,9 @@ public class Aeropuerto {
     @Size(max = 100)
     private String pais;
 
-    @OneToMany
-    @JoinColumn(name = "id_aeropuerto_origen")
-    private List<Vuelo> vuelosOrigen;
+    @OneToMany(mappedBy = "aeropuertoOrigen")
+    private List<Vuelo> vuelosOrigen = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name = "id_aeropuerto_destino")
-    private List<Vuelo> vuelosDestino;
+    @OneToMany(mappedBy = "aeropuertoDestino")
+    private List<Vuelo> vuelosDestino = new ArrayList<>();
 }
