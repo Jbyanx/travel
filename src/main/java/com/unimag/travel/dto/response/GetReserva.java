@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public record GetReserva(
-        long id,
-        GetCliente cliente,
+        Long id,
+        String cliente,
         GetVuelo vuelo,
         LocalDate fechaDeReserva,
         int numeroDePasajeros

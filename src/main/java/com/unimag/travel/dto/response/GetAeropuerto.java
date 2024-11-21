@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 
 public record GetAeropuerto(
-        long id,
+        Long id,
         String nombre,
         String ciudad,
         String pais,
-        List<GetVuelo> vuelosOrigen,
-        List<GetVuelo> vuelosDestino
+        List<Long> idVuelosOrigen,
+        List<Long> idVuelosDestino
 ) implements Serializable {
 }
