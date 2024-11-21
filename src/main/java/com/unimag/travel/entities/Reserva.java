@@ -2,6 +2,7 @@ package com.unimag.travel.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -25,19 +26,28 @@ public class Reserva {
 
     @ManyToOne(targetEntity = Cliente.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente")
-    @NotNull
+    @NotNull(message = "El cliente es obligatorio para la reserva")
     private Cliente cliente;
 
     @OneToOne
     @JoinColumn(name = "id_vuelo")
-    @NotNull
+    @NotNull(message = "El vuelo es obligatorio para la reserva")
     private Vuelo vuelo;
 
     @Column(name = "fecha_de_reserva")
-    @FutureOrPresent(message = "solo puede reservar en fechas presentes o futuras")
+    @CreationTimestamp
     private LocalDate fechaDeReserva;
+
+    @Column(name = "fecha_de_viaje", nullable = false)
+    @FutureOrPresent(message = "La fecha de viaje debe ser presente o futura")
+    private LocalDate fechaDeViaje;
 
     @Column(name = "numero_de_pasajeros")
     @Min(value = 1, message = "el numero minimo de pasajeros es 1")
+    @Max(value = 10, message = "El número máximo de pasajeros es 10")
     private int numeroDePasajeros;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado_reserva", nullable = false)
+    private EstadoReserva estadoReserva;
 }
