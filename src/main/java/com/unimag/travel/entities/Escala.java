@@ -19,19 +19,20 @@ import java.time.Duration;
 @NoArgsConstructor
 public class Escala {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idEscala;
 
     @OneToOne
-    @JoinColumn(name = "id_escala")
-    @NotNull
+    @JoinColumn(name = "id_vuelo_escala")
+    @NotNull(message = "El vuelo es obligatorio")
     private Vuelo vuelo;
 
     @OneToOne
-    @JoinColumn(name = "id_escala")
-    @NotNull
+    @JoinColumn(name = "id_aeropuerto_escala")
+    @NotNull(message = "El aeropuerto es obligatorio")
     private Aeropuerto aeropuerto;
 
     @Column(name = "tiempo_de_escala")
-    @NotNull
+    @NotNull(message = "El tiempo de escala es obligatorio")
     private Duration tiempoDeEscala;
 }

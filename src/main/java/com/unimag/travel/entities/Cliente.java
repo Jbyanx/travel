@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +43,7 @@ public class Cliente {
     private String correoElectronico;
 
     @OneToMany(mappedBy = "cliente")
-    private List<Reserva> reservas;
+    private List<Reserva> reservas = new ArrayList<>();
     
     @ManyToMany
     @JoinTable(
@@ -50,8 +51,11 @@ public class Cliente {
             joinColumns = @JoinColumn(name = "id_cliente"),
             inverseJoinColumns = @JoinColumn(name = "id_vuelo")
     )
-    private List<Vuelo> vuelos;
+    private List<Vuelo> vuelos = new ArrayList<>();
 
+    @Column(nullable = false)
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 6, message = "La contraseña debe tener al menos {min} caracteres")
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
