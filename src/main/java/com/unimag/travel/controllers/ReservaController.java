@@ -36,7 +36,6 @@ public class ReservaController {
         return ResponseEntity.ok(reservaService.getReservaById(id));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<GetReserva> createOneReserva(@RequestBody @Valid SaveReserva saveReserva){
         GetReserva createdReserva = reservaService.createReserva(saveReserva);
@@ -49,13 +48,11 @@ public class ReservaController {
         return ResponseEntity.created(newLocation).body(createdReserva);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<GetReserva> updateReservaById(@RequestBody @Valid SaveReserva saveReserva, @PathVariable Long id){
         return ResponseEntity.ok(reservaService.updateReservaById(id, saveReserva));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReserva(@PathVariable Long id) {
         reservaService.deleteReservaById(id);

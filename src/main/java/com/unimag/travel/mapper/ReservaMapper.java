@@ -25,6 +25,7 @@ public interface ReservaMapper {
     List<Reserva> saveReservaListToReservaList(List<SaveReserva> saveReservaList);
 
     @Mapping(source = "idReserva", target = "id")
+    @Mapping(source = "cliente.nombre", target = "cliente")
     GetReserva reservaToGetReserva(Reserva reserva);
 
     @InheritInverseConfiguration
