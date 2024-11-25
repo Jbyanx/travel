@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
@@ -24,14 +26,30 @@ public class JwtUtil {
     private int expirationMs;
 
     public String generateToken(Authentication authentication) {
-        UserDetails userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(grantedAuthority -> grantedAuthority.getAuthority())
+                .collect(Collectors.toList()); // Cambia a List<String>
+
         return Jwts.builder()
-                .setSubject((userDetails.getUsername()))
+                .setSubject(userDetails.getUsername())
+                .claim("roles", roles) // Guarda los roles como arreglo
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + expirationMs))
-                .signWith(key(),SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
+                .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
+
+    public List<String> getRolesFromJwtToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("roles", List.class);
+    }
+
 
     public boolean validateToken(String authToken) {
         try {
