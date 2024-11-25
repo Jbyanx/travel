@@ -50,11 +50,18 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**","/vuelos/**").permitAll()
-                        .anyRequest().authenticated());
-
-        // Habilitar CORS con la configuración que definimos
-        http.cors().configurationSource(corsConfigurationSource());
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**", "/vuelos/**").permitAll() // Permitir estas rutas sin autenticación
+                        .anyRequest().authenticated() // Requerir autenticación para el resto
+                )
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // Permitir un origen específico
+                    config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+                    config.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+                    config.setAllowCredentials(true);
+                    return config;
+                }));
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -62,22 +69,10 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+
     @Bean
     public AuthTokenFilter authTokenFilter() {
         return new AuthTokenFilter();
     }
 
-    @Bean
-    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // Permitir un origen específico
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);  // Aplica a todas las rutas
-
-        return source;
-    }
 }
