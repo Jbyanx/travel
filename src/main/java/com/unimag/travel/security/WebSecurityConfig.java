@@ -1,6 +1,5 @@
 package com.unimag.travel.security;
 
-import com.unimag.travel.security.jwt.exception.AuthEntryPointJwt;
 import com.unimag.travel.security.jwt.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +27,6 @@ import java.util.Arrays;
 public class WebSecurityConfig {
 
     @Autowired private UserDetailsService userDetailsService;
-    @Autowired private AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -51,9 +49,8 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**","/vuelos/**").permitAll()
                         .anyRequest().authenticated());
 
         // Habilitar CORS con la configuración que definimos
