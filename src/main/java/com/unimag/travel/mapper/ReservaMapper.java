@@ -26,6 +26,7 @@ public interface ReservaMapper {
 
     @Mapping(source = "idReserva", target = "id")
     @Mapping(source = "cliente.nombre", target = "cliente")
+    @Mapping(source = "vuelo.idVuelo", target = "idVuelo")
     GetReserva reservaToGetReserva(Reserva reserva);
 
     @InheritInverseConfiguration

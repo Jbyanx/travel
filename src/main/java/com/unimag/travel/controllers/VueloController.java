@@ -36,7 +36,7 @@ public class VueloController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{idCliente}")
+    @PutMapping("/{idVuelo}")
     public ResponseEntity<GetVuelo> updateVuelo(@PathVariable Long idVuelo, @RequestBody @Valid SaveVuelo saveVuelo) {
         return ResponseEntity.ok(vueloService.updateVueloById(idVuelo, saveVuelo));
     }
