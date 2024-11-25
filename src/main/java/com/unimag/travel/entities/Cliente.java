@@ -59,7 +59,7 @@ public class Cliente {
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "User_role",
+    @JoinTable(name = "cliente_role",
     joinColumns = @JoinColumn(name = "id_cliente"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
