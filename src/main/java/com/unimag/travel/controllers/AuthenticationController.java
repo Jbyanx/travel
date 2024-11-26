@@ -51,8 +51,10 @@ public class AuthenticationController {
                 new UsernamePasswordAuthenticationToken(loginRequest.correoElectronico(), loginRequest.password())
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+        List<String> roles = principal.getAuthorities().stream().map(e -> e.getAuthority().toString() ).toList();
         String jwtToken = jwtUtil.generateToken(authentication);
-        return new ResponseEntity<>(new JwtResponse(jwtToken, "Bearer"),HttpStatus.OK);
+        return new ResponseEntity<>(new JwtResponse(jwtToken, "Bearer", loginRequest.correoElectronico(), roles),HttpStatus.OK);
     }
 
     @PostMapping("/signup")

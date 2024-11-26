@@ -60,7 +60,7 @@ public class Cliente {
 
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "cliente_role",
+    @JoinTable(name = "User_role",
     joinColumns = @JoinColumn(name = "id_cliente"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
