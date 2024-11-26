@@ -16,9 +16,7 @@ import com.unimag.travel.services.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReservaServiceImpl implements ReservaService {
@@ -91,5 +89,10 @@ public class ReservaServiceImpl implements ReservaService {
     @Override
     public void deleteReservaById(Long id) {
         reservaRepository.deleteById(id);
+    }
+
+    public List<GetReserva> getReservasByCliente(Long idCliente) {
+        List<Reserva> reservas = reservaRepository.findByCliente_IdCliente(idCliente);
+        return ReservaMapper.INSTANCE.reservaListToGetReservaList(reservas);
     }
 }
