@@ -31,6 +31,7 @@ public interface EscalaMapper {
     @Mapping(target = "id", source = "idEscala")
     @Mapping(target = "duracion", source = "tiempoDeEscala")
     @Mapping(target = "idVuelo", source = "vuelo.idVuelo")
+    @Mapping(target = "idAeropuerto", source = "aeropuerto.idAeropuerto")
     GetEscala escalaToGetEscala(Escala escala);
 
     @InheritInverseConfiguration
