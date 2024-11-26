@@ -39,6 +39,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         //Convertir un Set de roles a una lista
         List<Role> roles = new ArrayList<>(cliente.getRoles());
-        return new User(cliente.getCorreoElectronico(), cliente.getPassword(), mapToAutorities(roles));
+        return UserDetailsImpl.build(cliente);
     }
 }
