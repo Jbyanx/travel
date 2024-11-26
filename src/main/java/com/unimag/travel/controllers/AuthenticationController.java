@@ -10,7 +10,9 @@ import com.unimag.travel.repositories.ClienteRepository;
 import com.unimag.travel.repositories.RoleRepository;
 import com.unimag.travel.security.jwt.JwtUtil;
 import com.unimag.travel.security.services.UserDetailsImpl;
+import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,16 +30,20 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
+    private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
-    @Autowired
     private JwtUtil jwtUtil;
-    @Autowired
-    ClienteRepository clienteRepository;
-    @Autowired
+    private ClienteRepository clienteRepository;
     private RoleRepository roleRepository;
+
+    @Autowired
+    public AuthenticationController(PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtil jwtUtil, ClienteRepository clienteRepository, RoleRepository roleRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+        this.clienteRepository = clienteRepository;
+        this.roleRepository = roleRepository;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest loginRequest) {
@@ -46,14 +52,11 @@ public class AuthenticationController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwtToken = jwtUtil.generateToken(authentication);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String > roles = userDetails.getAuthorities().stream()
-                .map(role -> role.getAuthority()).collect(Collectors.toList());
-        return ResponseEntity.ok(new JwtResponse(jwtToken, "Bearer", userDetails.getUsername(), roles));
+        return new ResponseEntity<>(new JwtResponse(jwtToken, "Bearer"),HttpStatus.OK);
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignupRequest sRequest){
+    public ResponseEntity<String> registerUser(@RequestBody SignupRequest sRequest){
         if(clienteRepository.existsByCorreoElectronico(sRequest.correoElectronico())) {
             return ResponseEntity.badRequest().body("Error: El correo ya existe");
         }
@@ -67,14 +70,12 @@ public class AuthenticationController {
         cliente.setPassword(passwordEncoder.encode(sRequest.password()));
 
         Set<Role> roles = new HashSet<>();
-
         Role role = roleRepository.findByName(ERole.ROLE_USER)
                         .orElseThrow(() -> new RuntimeException("Error: El role no existe"));
-
         roles.add(role);
 
         cliente.setRoles(roles);
-        Cliente clienteSaved = clienteRepository.save(cliente);
-        return ResponseEntity.ok(clienteSaved);
+        clienteRepository.save(cliente);
+        return new ResponseEntity<>("Registro exitoso", HttpStatus.OK);
     }
 }

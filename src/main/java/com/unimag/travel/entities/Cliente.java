@@ -58,6 +58,7 @@ public class Cliente {
     @Size(min = 6, message = "La contraseña debe tener al menos {min} caracteres")
     private String password;
 
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "User_role",
     joinColumns = @JoinColumn(name = "id_cliente"),
