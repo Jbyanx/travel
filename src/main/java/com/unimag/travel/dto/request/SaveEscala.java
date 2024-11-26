@@ -7,9 +7,9 @@ import java.time.Duration;
 
 public record SaveEscala(
         @NotNull
-        long idVuelo,
+        Long idVuelo,
         @NotNull
-        long idAeropuerto,
+        Long idAeropuerto,
         @NotNull
         Duration duracion
 ) implements Serializable {

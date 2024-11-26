@@ -9,12 +9,12 @@ import java.time.LocalDate;
 
 public record SaveReserva(
         @NotNull
-        long idCliente,
+        Long idCliente,
         @NotNull
-        long idVuelo,
+        Long idVuelo,
         @FutureOrPresent
         LocalDate fechaDeViaje,
         @Min(value = 1, message = "el numero minimo de pasajeros es 1")
-        int numeroDePasajeros
+        Integer numeroDePasajeros
 ) implements Serializable {
 }

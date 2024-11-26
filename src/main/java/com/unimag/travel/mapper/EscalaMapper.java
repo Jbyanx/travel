@@ -4,6 +4,7 @@ import com.unimag.travel.dto.request.SaveEscala;
 import com.unimag.travel.dto.response.GetEscala;
 import com.unimag.travel.entities.Escala;
 import org.mapstruct.InheritConfiguration;
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -20,7 +21,7 @@ public interface EscalaMapper {
     @Mapping(target = "duracion", source = "tiempoDeEscala")
     SaveEscala escalaToSaveEscala(Escala escala);
 
-    @InheritConfiguration
+    @InheritInverseConfiguration
     Escala saveEscalaToEscala(SaveEscala saveEscala);
 
     List<SaveEscala> escalaListToSaveEscalaList(List<Escala> escalaList);
@@ -29,9 +30,10 @@ public interface EscalaMapper {
     //Get Escala
     @Mapping(target = "id", source = "idEscala")
     @Mapping(target = "duracion", source = "tiempoDeEscala")
+    @Mapping(target = "idVuelo", source = "vuelo.idVuelo")
     GetEscala escalaToGetEscala(Escala escala);
 
-    @InheritConfiguration
+    @InheritInverseConfiguration
     Escala getEscalaToEscala(GetEscala getEscala);
 
     List<GetEscala> escalaListToGetEscalaList(List<Escala> escalaList);

@@ -6,8 +6,8 @@ import java.time.LocalDate;
 public record GetReserva(
         Long id,
         String cliente,
-        GetVuelo vuelo,
+        Long idVuelo,
         LocalDate fechaDeReserva,
-        int numeroDePasajeros
+        Integer numeroDePasajeros
 ) implements Serializable {
 }

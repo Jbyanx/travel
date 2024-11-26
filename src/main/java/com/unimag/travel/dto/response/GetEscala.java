@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.Duration;
 
 public record GetEscala(
-        long id,
+        Long id,
         GetAeropuerto aeropuerto,
         Long idVuelo,
         Duration duracion

@@ -29,6 +29,6 @@ public class Aerolinea {
     @Size(max = 100, message = "el pais de origen no debe exceder {max} caracteres")
     private String paisDeOrigen;
 
-    @OneToMany(mappedBy = "aerolinea", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "aerolinea")
     private List<Vuelo> vuelos = new ArrayList<>();
 }

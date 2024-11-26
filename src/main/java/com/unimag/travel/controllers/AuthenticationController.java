@@ -51,7 +51,6 @@ public class AuthenticationController {
                 new UsernamePasswordAuthenticationToken(loginRequest.correoElectronico(), loginRequest.password())
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         // Obtener el token
         String jwtToken = jwtUtil.generateToken(authentication);
 
