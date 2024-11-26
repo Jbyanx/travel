@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
                 status,
                 request.getRequestURL().toString(),
                 request.getMethod(),
-                "Error, hay un conflicto de integridad de datos, verifique si existen campos unicos",
+                "Error, hay un conflicto de integridad de datos, verifique si existen campos unicos o referencias a otras tablas",
                 dataIntegrityViolationException.getMessage(),
                 LocalDateTime.now(ZoneId.systemDefault()),
                 null
