@@ -13,7 +13,7 @@ public record SaveReserva(
         @NotNull
         long idVuelo,
         @FutureOrPresent
-        LocalDate fechaDeReserva,
+        LocalDate fechaDeViaje,
         @Min(value = 1, message = "el numero minimo de pasajeros es 1")
         int numeroDePasajeros
 ) implements Serializable {
