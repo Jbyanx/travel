@@ -1,6 +1,5 @@
 package com.unimag.travel.security;
 
-import com.unimag.travel.security.jwt.exception.AuthEntryPointJwt;
 import com.unimag.travel.security.jwt.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -27,11 +25,7 @@ import java.util.Arrays;
 public class WebSecurityConfig {
 
     @Autowired private UserDetailsService userDetailsService;
-    @Autowired private AuthEntryPointJwt unauthorizedHandler;
 
-    public WebSecurityConfig(AuthEntryPointJwt unauthorizedHandler) {
-        this.unauthorizedHandler = unauthorizedHandler;
-    }
     @Bean
     public AuthTokenFilter authTokenFilter() {
         return new AuthTokenFilter();
@@ -59,10 +53,10 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf-> csrf.disable())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
-                        .anyRequest().authenticated());
+                        .anyRequest().authenticated())
+                        .cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
