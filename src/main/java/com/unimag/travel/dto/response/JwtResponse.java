@@ -7,6 +7,7 @@ import java.util.List;
 public record JwtResponse(
         String token,
         String type,
+        Long idCliente,
         //String email,
         List<String> roles
 ) {
