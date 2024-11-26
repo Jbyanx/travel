@@ -21,12 +21,12 @@ public record SaveVuelo(
         @NotNull
         Duration duracion,
         @Min(value = 1, message = "el vuelo no puede ir sin pasajeros")
-        int capacidad,
+        Integer capacidad,
         @NotNull
-        long idAerolinea,
+        Long idAerolinea,
         @NotNull
-        long idAeropuertoOrigen,
+        Long idAeropuertoOrigen,
         @NotNull
-        long idAeropuertoDestino
+        Long idAeropuertoDestino
 ) implements Serializable {
 }

@@ -33,14 +33,14 @@ public class AeropuertoController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/idAeropuerto")
+    @PutMapping("/{idAeropuerto}")
     public ResponseEntity<GetAeropuerto> updateAeropuerto(@PathVariable Long idAeropuerto, @RequestBody @Valid SaveAeropuerto saveAeropuerto){
         GetAeropuerto getAeropuerto = aeropuertoService.updateAeropuertoById(idAeropuerto, saveAeropuerto);
         return ResponseEntity.ok(getAeropuerto);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{iAeropuerto}")
+    @DeleteMapping("/{idAeropuerto}")
     public ResponseEntity<Void> deleteAeropuerto(@PathVariable Long idAeropuerto) {
         aeropuertoService.deleteAeropuertoById(idAeropuerto);
         return ResponseEntity.noContent().build();
