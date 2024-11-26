@@ -36,11 +36,11 @@ public class Reserva {
 
     @Column(name = "fecha_de_reserva")
     @CreationTimestamp
-    private LocalDate fechaDeReserva;
+    private LocalDate fechaDeReserva = LocalDate.now();
 
     @Column(name = "fecha_de_viaje", nullable = false)
     @FutureOrPresent(message = "La fecha de viaje debe ser presente o futura")
-    private LocalDate fechaDeViaje;
+    private LocalDate fechaDeViaje = LocalDate.now();
 
     @Column(name = "numero_de_pasajeros")
     @Min(value = 1, message = "el numero minimo de pasajeros es 1")
@@ -49,5 +49,5 @@ public class Reserva {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado_reserva", nullable = false)
-    private EstadoReserva estadoReserva;
+    private EstadoReserva estadoReserva = EstadoReserva.PENDING;
 }
