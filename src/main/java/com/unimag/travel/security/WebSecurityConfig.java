@@ -29,9 +29,6 @@ public class WebSecurityConfig {
     @Autowired private UserDetailsService userDetailsService;
     @Autowired private AuthEntryPointJwt unauthorizedHandler;
 
-    public WebSecurityConfig(AuthEntryPointJwt unauthorizedHandler) {
-        this.unauthorizedHandler = unauthorizedHandler;
-    }
     @Bean
     public AuthTokenFilter authTokenFilter() {
         return new AuthTokenFilter();
