@@ -27,9 +27,9 @@ public class EscalaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Escala>> getAllEscalas(){
+    public ResponseEntity<List<GetEscala>> getAllEscalas(){
         List<GetEscala> escalaList = escalaService.getAllEscalas();
-        return ResponseEntity.ok(EscalaMapper.INSTANCE.getEscalaListToEscalaList(escalaList));
+        return ResponseEntity.ok(escalaList);
     }
 
     @GetMapping("/{id}")

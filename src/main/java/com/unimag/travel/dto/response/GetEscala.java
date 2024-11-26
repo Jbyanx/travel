@@ -5,7 +5,7 @@ import java.time.Duration;
 
 public record GetEscala(
         Long id,
-        GetAeropuerto aeropuerto,
+        Long idAeropuerto,
         Long idVuelo,
         Duration duracion
 ) implements Serializable {}
