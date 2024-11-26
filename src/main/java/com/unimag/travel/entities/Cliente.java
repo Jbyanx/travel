@@ -45,7 +45,7 @@ public class Cliente {
     @OneToMany(mappedBy = "cliente")
     private List<Reserva> reservas = new ArrayList<>();
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "clientes_vuelos",
             joinColumns = @JoinColumn(name = "id_cliente"),
@@ -60,7 +60,7 @@ public class Cliente {
 
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "User_role",
+    @JoinTable(name = "user_role",
     joinColumns = @JoinColumn(name = "id_cliente"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
