@@ -37,8 +37,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Cliente cliente = clienteRepository.findByCorreoElectronico(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-        //Convertir un Set de roles a una lista
-        List<Role> roles = new ArrayList<>(cliente.getRoles());
-        return new User(cliente.getCorreoElectronico(), cliente.getPassword(), mapToAutorities(roles));
+        List<GrantedAuthority> authorities = cliente.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .collect(Collectors.toList());
+        return new UserDetailsImpl(cliente.getIdCliente(), cliente.getCorreoElectronico(), cliente.getPassword(), authorities);
     }
 }
