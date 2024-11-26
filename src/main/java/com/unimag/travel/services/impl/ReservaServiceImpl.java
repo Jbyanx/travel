@@ -75,7 +75,7 @@ public class ReservaServiceImpl implements ReservaService {
         Cliente cliente = clienteRepository.findById(saveReserva.idCliente())
                 .orElseThrow(() -> new ClienteNotFoundException("cliente no encontrado al actualizar la reserva"));
 
-        reservaFromDb.setFechaDeViaje(saveReserva.fechaDeViaje());
+        //reservaFromDb.setFechaDeViaje(saveReserva.fechaDeViaje());
         reservaFromDb.getCliente().setIdCliente(saveReserva.idCliente());
         reservaFromDb.getVuelo().setIdVuelo(saveReserva.idVuelo());
         reservaFromDb.setNumeroDePasajeros(saveReserva.numeroDePasajeros());

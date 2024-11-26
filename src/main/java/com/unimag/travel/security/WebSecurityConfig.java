@@ -56,12 +56,12 @@ public class WebSecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/vuelos/**").permitAll() // Permitir estas rutas sin autenticación
+                        .requestMatchers("/auth/**", "/vuelos/**").permitAll() // rutas permitidas
                         .anyRequest().authenticated() // Requerir autenticación para el resto
                 )
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // Permitir un origen específico
+                    config.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // origen del frontend
                     config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
                     config.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
                     config.setAllowCredentials(true);

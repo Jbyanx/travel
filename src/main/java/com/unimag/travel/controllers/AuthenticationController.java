@@ -59,7 +59,10 @@ public class AuthenticationController {
                 .map(grantedAuthority -> grantedAuthority.getAuthority())
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(new JwtResponse(jwtToken, "Bearer", roles),HttpStatus.OK);
+        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+        Long idCliente = principal.getId();
+
+        return new ResponseEntity<>(new JwtResponse(jwtToken, "Bearer", idCliente, roles),HttpStatus.OK);
     }
 
     @PostMapping("/signup")

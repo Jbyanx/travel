@@ -35,6 +35,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .claim("roles", roles) // Agrega los roles
+                .claim("idCliente", userDetails.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(expiracion)
                 .signWith(SignatureAlgorithm.HS512,ConstantesSeguridad.JWT_SECRET)
